@@ -7,8 +7,6 @@ import AuthLayout from '../layouts/Auth';
 import ErrorLayout from '../layouts/Error';
 import DashboardLayout from '../layouts/Dashboard';
 import OverviewView from '../views/Overview';
-import appList from '../views/admin/app/applist';
-import appCreate from '../views/admin/app/appcreate';
 
 const routes = [
   {
@@ -69,14 +67,34 @@ const routes = [
         component: OverviewView
       },
       {
-        path: '/admin/applist',
+        path: '/admin/app/list',
         exact: true,
-        component: lazy(() => import('../views/admin/app/applist'))
+        component: lazy(() => import('../views/admin/app/applist/applist'))
       },
       {
-        path: '/admin/appcreate',
+        path: '/admin/app/create',
         exact: true,
         component: lazy(() => import('../views/admin/app/appcreate'))
+      },
+      {
+        path: '/admin/app/:app_id/detail',
+        exact: true,
+        component: lazy(() => import('../views/admin/app/appdetail/appdetail'))
+      },
+      {
+        path: '/admin/app/:app_id/update',
+        exact: true,
+        component: lazy(() => import('../views/admin/app/appedit/appedit'))
+      },
+      {
+        path: '/admin/transaction/list',
+        exact: true,
+        component: lazy(() => import('../views/admin/transactions/transactionslist/transactionslist'))
+      },
+      {
+        path: '/admin/transaction/:invoice_no/detail',
+        exact: true,
+        component: lazy(() => import('../views/admin/transactions/transactionsdetail/transationsdetail'))
       },
       {
         component: () => <Redirect to="/errors/error-404" />

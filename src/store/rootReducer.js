@@ -4,6 +4,8 @@ import mainReducer from './main/reducer'
 import appReducer from './app/reducer';
 import { categoriesReducer } from './app/reducer';
 import { paymentTypesReducer } from './app/reducer';
+import { selectedDataReducer } from './app/reducer';
+import { clientTransactionsReducer } from './transactions/reducer';
 
 import userReducer from './user/reducer';
 
@@ -14,6 +16,8 @@ const rootReducer = combineReducers({
   appdata: appReducer,
   categories: categoriesReducer,
   paymentTypes: paymentTypesReducer,
+  selectedApp: selectedDataReducer,
+  transactions: clientTransactionsReducer
 })
 
 export default rootReducer;

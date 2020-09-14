@@ -9,9 +9,9 @@ import {
   Button
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { getAppCategories, getPaymentTypes, appCreate } from '../../../store/app/action';
+import { getAppCategories, getPaymentTypes, updateData } from '../../../../store/app/action';
 import { connect } from 'react-redux';
-
+import _ from 'lodash';
 const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
@@ -56,11 +56,11 @@ const useStyles = makeStyles(theme => ({
 
 const platformID = [
   {
-    label: 'Web',
+    label: 'WEB',
     value: 1,
   },
   {
-    label: 'Android',
+    label: 'ANDROID',
     value: 2,
   },
   {
@@ -69,18 +69,14 @@ const platformID = [
   }
 ];
 
-function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, paymentTypes,
-}) {
+function AppEdit(props) {
+  const { getAppCategories, getPaymentTypes, categories, paymentTypes, updateData, match, selectedApp
+  } = props;
+
+  const app_id = match.params.app_id;
   const classes = useStyles();
-  const [create, setCreate] = useState({
-    name: '',
-    frontend_url: '',
-    backend_url: '',
-    category_id: 0,
-    payment_type_id: 0,
-    platform_id: 0,
-    app_type_id: 1,
-  })
+  const [data, setData] = useState(selectedApp);
+
   const [error, setError] = useState({
     name: '',
     frontend_url: '',
@@ -98,56 +94,59 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
   }, []);
 
   useEffect(() => {
-    const { name, frontend_url, backend_url, category_id, payment_type_id, platform_id } = create;
+    if (categories !== undefined && paymentTypes !== undefined) {
+      const cat = _.find(categories, { name: data.category });
+      const pay = _.find(paymentTypes, { type: _.lowerCase(data.payment_type) });
+      const plat = _.find(platformID, { label: _.replace(_.upperCase(data.platform), ' ', '') });
+      setData({
+        ...data, payment_type: pay.id, category: cat.id, platform: plat.value
+      })
+      console.log('cat', cat, 'pay', pay, 'plat', plat);
+    }
+  }, [categories, paymentTypes])
+
+  useEffect(() => {
+    const { app_name, frontend_url, backend_url, category, payment_type, platform } = data;
 
     if (
-      name.length > 0 &&
+      app_name.length > 0 &&
       frontend_url.length > 0 &&
       backend_url.length > 0 &&
-      category_id !== 0 &&
-      payment_type_id !== 0 &&
-      platform_id !== 0
+      category !== 0 &&
+      payment_type !== 0 &&
+      platform !== 0
     ) {
       setDisable(false)
     }
     else {
       setDisable(true)
     }
-  }, [create])
+  }, [data])
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setCreate({ ...create, [name]: value })
+    setData({ ...data, [name]: value })
     if (value === ' ') {
       setError({ ...error, [name]: `${name.toUpperCase().replace(/_/g, ' ')} is required !` })
-      setCreate({ ...create, [name]: value })
+      setData({ ...data, [name]: value })
     } else {
       setError({ ...error, [name]: '' })
-      setCreate({ ...create, [name]: value })
+      setData({ ...data, [name]: value })
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    const data = create;
+    const data = data;
 
-    appCreate(data);
+    updateData(app_id, data);
 
-    setCreate({
-      name: '',
-      frontend_url: '',
-      backend_url: '',
-      category_id: 0,
-      payment_type_id: 0,
-      platform_id: 0,
-      app_type_id: 1,
-    })
+    setData(selectedApp)
   }
 
   return (
-
     <div className={classes.rootCenter} >
       <Grid
         item
@@ -155,7 +154,6 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
         sm={2}
         xs={1}
       />
-
       <Grid
         item
         md={8}
@@ -164,7 +162,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
       >
         <Card>
           <CardContent>
-            <h3 style={{ paddingBottom: '5rem', textAlign: 'center' }}>App Create</h3>
+            <h3 style={{ paddingBottom: '5rem', textAlign: 'center' }}>App Update</h3>
             <form >
               <div className={classes.formGroup}>
                 <TextField
@@ -172,9 +170,9 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   fullWidth
                   helperText={error.name.length > 0 ? error.name : ''}
                   label="name"
-                  name="name"
+                  name="app_name"
                   onChange={handleChange}
-                  value={create.name}
+                  value={data.app_name}
                   variant="outlined"
                 />
               </div>
@@ -186,7 +184,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   label="frontend url"
                   name="frontend_url"
                   onChange={handleChange}
-                  value={create.frontend_url}
+                  value={data.frontend_url}
                   variant="outlined"
                 />
               </div>
@@ -198,7 +196,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   label="backend url"
                   name="backend_url"
                   onChange={handleChange}
-                  value={create.backend_url}
+                  value={data.backend_url}
                   variant="outlined"
                 />
               </div>
@@ -213,7 +211,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   name="category_id"
                   onChange={handleChange}
                   select
-                  value={create.category_id}
+                  value={data.category}
                   variant="outlined"
                 >
                   <MenuItem
@@ -243,7 +241,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   name="payment_type_id"
                   onChange={handleChange}
                   select
-                  value={create.payment_type_id}
+                  value={data.payment_type}
                   variant="outlined"
                 >
                   <MenuItem
@@ -273,7 +271,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   name="platform_id"
                   onChange={handleChange}
                   select
-                  value={create.platform_id}
+                  value={data.platform}
                   variant="outlined"
                 >
                   <MenuItem
@@ -307,7 +305,6 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
           </CardContent>
         </Card>
       </Grid>
-
       <Grid
         item
         md={2}
@@ -318,13 +315,14 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
   );
 }
 
-const mapStateToProps = ({ categories, paymentTypes }) => {
+const mapStateToProps = ({ categories, paymentTypes, selectedApp }) => {
   return {
     categories: categories.categories,
-    paymentTypes: paymentTypes.payment_types
+    paymentTypes: paymentTypes.payment_types,
+    selectedApp: selectedApp.data
   }
 }
 
 export default connect(mapStateToProps, {
-  getAppCategories, getPaymentTypes, appCreate
-})(AppCreate);
+  getAppCategories, getPaymentTypes, updateData
+})(AppEdit);

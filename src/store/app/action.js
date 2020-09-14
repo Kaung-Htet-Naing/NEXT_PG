@@ -6,7 +6,8 @@ import {
   DATA_UPDATE,
   APP_DETAIL,
   APP_UPDATE,
-  DELETE_DATA
+  DELETE_DATA,
+  SELECT_EDIT,
 } from './type';
 import api from '../../constants/api';
 
@@ -27,7 +28,7 @@ export const appList = () => async (dispatch) => {
   try {
     dispatch({
       type: APP_LIST,
-      payload: response.data.data.app_list,
+      payload: response.data.data,
     });
   } catch (error) {
     console.log(error);
@@ -72,7 +73,7 @@ export const dataUpdate = (app_id, data) => async (dispatch) => {
 
 export const dataDetail = (app_id, password) => async (dispatch) => {
   const response = await api.post(`/api/v1/apps/${app_id}/detail`, {
-    "password": password
+    'password': password
   });
   try {
     dispatch({
@@ -97,11 +98,22 @@ export const updateData = (app_id, data) => async (dispatch) => {
 };
 
 export const deleteData = (app_id) => async (dispatch) => {
-  const response = await api.post(`/api/v1/apps/${app_id}/`);
+  const response = await api.delete(`/api/v1/apps/${app_id}/`);
   try {
     dispatch({
       type: DELETE_DATA,
       payload: response,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const selectdata = (data) => (dispatch) => {
+  try {
+    dispatch({
+      type: SELECT_EDIT,
+      payload: data,
     });
   } catch (error) {
     console.log(error);

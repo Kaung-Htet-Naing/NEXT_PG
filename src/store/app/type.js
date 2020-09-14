@@ -6,6 +6,7 @@ export const DATA_UPDATE = 'DATA_UPDATE';
 export const APP_DETAIL = 'APP_DETAIL';
 export const APP_UPDATE = 'APP_UPDATE';
 export const DELETE_DATA = 'DELETE_DATA';
+export const SELECT_EDIT = 'SELECT_EDIT';
 
 
 

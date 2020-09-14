@@ -5,7 +5,8 @@ import { colors } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/DashboardOutlined';
 import HomeIcon from '@material-ui/icons/HomeOutlined';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
-
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import { Label } from 'components';
 
 export default [
@@ -19,16 +20,42 @@ export default [
       },
       {
         title: 'App',
-        href: '/admin',
+        href: '/admin/app',
         icon: DashboardIcon,
         children: [
           {
             title: 'App List',
-            href: '/admin/applist'
+            href: '/admin/app/list'
           },
           {
             title: 'App Create',
-            href: '/admin/appcreate'
+            href: '/admin/app/create'
+          }
+        ]
+      },
+      {
+        title: 'Transaction Management',
+        href: '/admin/transaction',
+        icon: CreditCardIcon,
+        children: [
+          {
+            title: 'Transaction List',
+            href: '/admin/transaction/list'
+          },
+          {
+            title: 'Transaction Create',
+            href: '/admin/transaction/create'
+          }
+        ]
+      },
+      {
+        title: 'With-Draw Management',
+        href: '/admin/with_draw',
+        icon: MonetizationOnIcon,
+        children: [
+          {
+            title: 'With-Draw List',
+            href: '/admin/with_draw/list'
           }
         ]
       }
