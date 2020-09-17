@@ -101,8 +101,13 @@ function AppEdit(props) {
       setData({
         ...data, payment_type: pay.id, category: cat.id, platform: plat.value
       })
-      console.log('cat', cat, 'pay', pay, 'plat', plat);
+      console.log('cat', cat.id, 'pay', pay.id, 'plat', plat.value);
     }
+    // else {
+    //   setData({
+    //     ...data, payment_type: 2, category: 2, platform: 2
+    //   })
+    // }
   }, [categories, paymentTypes])
 
   useEffect(() => {

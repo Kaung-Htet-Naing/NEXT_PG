@@ -29,3 +29,7 @@ code {
       flex-basis: 46%!important;
   }
 }
+
+.MuiAppBar-colorPrimary{
+  background-color: #37474f !important;
+}

@@ -41,6 +41,10 @@ const useStyles = makeStyles(theme => ({
   inner: {
     minWidth: 1150
   },
+  nameCell: {
+    display: 'flex',
+    alignItems: 'center'
+  },
   actions: {
     padding: theme.spacing(0, 1),
     justifyContent: 'flex-end'

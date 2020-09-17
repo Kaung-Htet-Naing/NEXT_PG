@@ -52,7 +52,7 @@ const ChatBar = props => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    
+
   }, []);
 
   const handleOpen = () => {
@@ -134,13 +134,13 @@ const ChatBar = props => {
                         size="small"
                       />
                     ) : (
-                      <Typography
-                        className={classes.lastActivity}
-                        variant="body2"
-                      >
-                        {moment(connection.lastActivity).fromNow()}
-                      </Typography>
-                    )}
+                        <Typography
+                          className={classes.lastActivity}
+                          variant="body2"
+                        >
+                          {moment(connection.lastActivity).fromNow()}
+                        </Typography>
+                      )}
                   </ListItem>
                 ))}
             </List>

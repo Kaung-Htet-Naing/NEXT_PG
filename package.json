@@ -23,6 +23,7 @@
     "react": "^16.13.1",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
+    "react-dropzone": "^11.1.0",
     "react-helmet": "^6.1.0",
     "react-paginate": "^6.5.0",
     "react-perfect-scrollbar": "^1.5.8",
@@ -31,9 +32,11 @@
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-scroll": "^1.8.1",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "validate.js": "^0.13.1"
   },
   "scripts": {
     "start": "react-scripts start",

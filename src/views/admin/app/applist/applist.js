@@ -21,8 +21,7 @@ const AppList = () => {
       className={classes.root}
       title="App List"
     >
-      <Header />
-
+      <Header />  
       <Results
         className={classes.results}
       />

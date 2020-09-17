@@ -29,8 +29,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 
 import useRouter from 'utils/useRouter';
-import {  NotificationsPopover } from 'components';
+import { NotificationsPopover } from 'components';
 import { logout } from '../../../../store/user/action';
+import logo from 'assets/img/logo_nexpg.png'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,6 +89,9 @@ const useStyles = makeStyles(theme => ({
   },
   logoutIcon: {
     marginRight: theme.spacing(1)
+  },
+  logo: {
+    width: '125px'
   }
 }));
 
@@ -105,7 +109,7 @@ const TopBar = props => {
   const [openNotifications, setOpenNotifications] = useState(false);
 
   useEffect(() => {
-    
+
   }, []);
 
   const handleLogout = () => {
@@ -154,8 +158,9 @@ const TopBar = props => {
       <Toolbar>
         <RouterLink to="/">
           <img
+            className={classes.logo}
             alt="Logo"
-            src="/images/logos/logo--white.svg"
+            src={logo}
           />
         </RouterLink>
         <div className={classes.flexGrow} />

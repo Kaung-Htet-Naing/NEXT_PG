@@ -15,6 +15,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import { Page } from 'components';
 import gradients from 'utils/gradients';
 import { LoginForm } from './components';
+import bg from '../../assets/img/logo_nexpg.png';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -108,7 +109,7 @@ const Login = () => {
             underline="always"
             variant="subtitle2"
           >
-            Don't have an account?
+            Don't have an account? Register Here
           </Link>
         </CardContent>
         <CardMedia

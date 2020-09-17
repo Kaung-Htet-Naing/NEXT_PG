@@ -123,11 +123,11 @@ const NavigationListItem = props => {
               color="inherit"
             />
           ) : (
-            <ExpandMoreIcon
-              className={classes.expandIcon}
-              color="inherit"
-            />
-          )}
+              <ExpandMoreIcon
+                className={classes.expandIcon}
+                color="inherit"
+              />
+            )}
         </Button>
         <Collapse in={open}>{children}</Collapse>
       </ListItem>

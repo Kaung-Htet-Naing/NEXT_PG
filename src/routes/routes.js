@@ -7,12 +7,20 @@ import AuthLayout from '../layouts/Auth';
 import ErrorLayout from '../layouts/Error';
 import DashboardLayout from '../layouts/Dashboard';
 import OverviewView from '../views/Overview';
+import HomeLayout from '../layouts/Home';
 
 const routes = [
   {
     path: '/',
     exact: true,
-    component: () => <Redirect to="/auth/Login" />
+    component: HomeLayout,
+    routes: [
+      {
+        path: '/',
+        exact: true,
+        component: () => lazy(() => import('../layouts/Home'))
+      }
+    ]
   },
   {
     path: '/auth',
@@ -62,7 +70,7 @@ const routes = [
     component: DashboardLayout,
     routes: [
       {
-        path: '/admin/dashboard',
+        path: '/admin',
         exact: true,
         component: OverviewView
       },

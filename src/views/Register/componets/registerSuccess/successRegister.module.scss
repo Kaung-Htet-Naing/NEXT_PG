@@ -1,0 +1,85 @@
+html,
+body{
+    height: 100%;
+    background: #ffffff;
+}
+
+.success_container{    
+    box-sizing: border-box;
+    font-family: 'Source Sans Pro';
+    background: #ffffff;
+    box-sizing: border-box;    
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    
+
+    .register_logo_success{
+        padding: 40px 60px 90px 40px;
+    
+             img{
+                width: 128px;
+             }
+          }
+        .container{
+            text-align: center;
+    
+            .success_image{
+                margin-top: -90px;
+    
+                img{
+                    width: 600px;
+                    height: 600px;
+               }
+        
+            }
+               .text{
+                font-size: 19px;
+                margin-bottom: 20px;
+                font-family: 'Source Sans Pro';
+        
+                h1{
+                    font-size: 30px;
+                    margin-bottom: 20px;
+                    font-weight: 1000;
+                    
+                }
+                .text_para{
+                    margin-bottom: 60px;
+                }
+              .account_info{
+                    display: block;    
+                    bottom: 1.6rem;
+                    left: 25%;                    
+                    color: #394358;
+                    font-size: 14px;
+                    font-weight: 600;
+                    letter-spacing: 0.5px;
+                    padding-bottom: 10px;                                    
+                    .special{
+                        color: #27cbcc;
+                        text-decoration: underline;
+                    }  
+                    
+                } 
+                .homeclick{
+                    margin-bottom: 20px;
+                }
+                .homeclick a{                       
+                    margin: 0 auto;                 
+                    font-size: 22px;
+                    color: #ffffff;
+                    font-weight: 800; 
+                    padding: 10px;                                       
+                    background-color: #27cbcc;                    
+                    text-align: center;
+                    width: 200px;                    
+                    border-radius: 5px;                     
+                    cursor: pointer;
+                }
+           }
+        
+        }   
+
+}

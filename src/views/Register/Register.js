@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -14,7 +14,8 @@ import PersonAddIcon from '@material-ui/icons/PersonAddOutlined';
 
 import gradients from 'utils/gradients';
 import { Page } from 'components';
-import { RegisterForm } from './components';
+import queryString from 'query-string';
+import { RegisterFrom, RegisterSuccess, RegisterSubmit } from './componets';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -78,8 +79,25 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Register = () => {
+const Register = (props) => {
   const classes = useStyles();
+  const [route, setRoute] = useState('');
+
+  useEffect(() => {
+    const type = queryString.parse(props.location.search);
+    setRoute(type.form);
+    console.log(type);
+    console.log('search', props.location.search)
+  }, [props]);
+
+  const renderRoute = (value) => {
+    if (value === '1') {
+      return < RegisterSubmit />;
+    } if (value === '2') {
+      return < RegisterSuccess />;
+    }
+    return <RegisterFrom />;
+  };
 
   return (
     <Page
@@ -98,7 +116,9 @@ const Register = () => {
           <Typography variant="subtitle2">
             Sign up on the internal platform
           </Typography>
-          <RegisterForm className={classes.registerForm} />
+          <div className="register" className={classes.registerForm}>
+            {renderRoute(route)}
+          </div>
           <Divider className={classes.divider} />
           <Link
             align="center"
