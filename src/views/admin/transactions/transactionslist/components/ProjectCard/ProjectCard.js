@@ -2,7 +2,6 @@ import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
-  Avatar,
   Button,
   Card,
   CardContent,
@@ -59,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProjectCard = props => {
-  const { data,getClientTransactionDetail,history, className, ...rest } = props;
+  const { data, getClientTransactionDetail, history, className, ...rest } = props;
 
   const classes = useStyles();
 
@@ -69,7 +68,7 @@ const ProjectCard = props => {
     Success: colors.green[600]
   };
 
-  const handleClick=(e,invoiceNo)=>{
+  const handleClick = (e, invoiceNo) => {
     getClientTransactionDetail(invoiceNo);
     history.push(`/admin/transaction/${invoiceNo}/detail`);
   }
@@ -141,7 +140,7 @@ const ProjectCard = props => {
         <div className={classes.actions}>
           <Button
             color="primary"
-            onClick={(e)=>handleClick(e,data.invoice_no)}
+            onClick={(e) => handleClick(e, data.invoice_no)}
             size="small"
             variant="contained"
           >

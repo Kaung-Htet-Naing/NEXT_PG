@@ -1,4 +1,3 @@
-import { act } from 'react-dom/test-utils';
 import {
   APP_CREATE,
   APP_LIST,

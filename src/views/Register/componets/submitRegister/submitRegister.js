@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import styles from './submitRegister.module.scss';
-import bg from '../../../../assets/img/logo_nexpg.png';
-import registerImage from '../../../../assets/img/undraw_credit_card_payment_12va.svg';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from "react-redux";
 import { setformregister } from '../../../../store/Register/register.action';
@@ -233,7 +230,8 @@ const SubmitRegister = ({ history, newprops, setformregister, className, ...rest
                     <Button
                         variant="contained"
                         color="primary"
-                        component="span" className={classes.button, classes.submitButton}
+                        component="span"
+                        className={clsx(classes.button, classes.submitButton)}
                         startIcon={<CloudUploadIcon />}
                     >
                         NRC File Upload
@@ -266,7 +264,7 @@ const SubmitRegister = ({ history, newprops, setformregister, className, ...rest
                         variant="contained"
                         color="primary"
                         component="span"
-                        className={classes.button, classes.submitButton}
+                        className={clsx(classes.button, classes.submitButton)}
                         startIcon={<CloudUploadIcon />}
                     >
                         Form 6/26 File Upload
@@ -291,7 +289,7 @@ const SubmitRegister = ({ history, newprops, setformregister, className, ...rest
             <Link to="/register?form=2"
                 onClick={registerSubmit}>
                 <Button
-                    className={classes.button, classes.submitButton}
+                    className={clsx(classes.button, classes.submitButton)}
                     color="primary"
                     variant="contained"
                 >

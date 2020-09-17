@@ -95,7 +95,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
   useEffect(() => {
     getAppCategories();
     getPaymentTypes();
-  }, []);
+  }, [getAppCategories, getPaymentTypes]);
 
   useEffect(() => {
     const { name, frontend_url, backend_url, category_id, payment_type_id, platform_id } = create;
@@ -206,7 +206,6 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                 <TextField
                   error={error.category_id.length > 0 ? true : false}
                   fullWidth
-                  helperText="Please select your category"
                   helperText={error.category_id.length > 0 ? error.category_id : ''}
                   id="outlined-select-currency"
                   label="Select"
@@ -236,7 +235,6 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                 <TextField
                   error={error.payment_type_id.length > 0 ? true : false}
                   fullWidth
-                  helperText="Please select your payment type"
                   helperText={error.payment_type_id.length > 0 ? error.payment_type_id : ''}
                   id="outlined-select-currency"
                   label="Select"
@@ -266,7 +264,6 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                 <TextField
                   error={error.platform_id.length > 0 ? true : false}
                   fullWidth
-                  helperText="Please select your platform"
                   helperText={error.platform_id.length > 0 ? error.platform_id : ''}
                   id="outlined-select-currency"
                   label="Select"

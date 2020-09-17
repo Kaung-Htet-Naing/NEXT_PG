@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { getAppCategories, getPaymentTypes, updateData } from '../../../../store/app/action';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+
 const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
@@ -91,7 +92,7 @@ function AppEdit(props) {
   useEffect(() => {
     getAppCategories();
     getPaymentTypes();
-  }, []);
+  }, [getAppCategories, getPaymentTypes]);
 
   useEffect(() => {
     if (categories !== undefined && paymentTypes !== undefined) {
@@ -103,12 +104,7 @@ function AppEdit(props) {
       })
       console.log('cat', cat.id, 'pay', pay.id, 'plat', plat.value);
     }
-    // else {
-    //   setData({
-    //     ...data, payment_type: 2, category: 2, platform: 2
-    //   })
-    // }
-  }, [categories, paymentTypes])
+  }, [categories, paymentTypes, data])
 
   useEffect(() => {
     const { app_name, frontend_url, backend_url, category, payment_type, platform } = data;
@@ -143,8 +139,6 @@ function AppEdit(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    const data = data;
 
     updateData(app_id, data);
 
@@ -209,7 +203,6 @@ function AppEdit(props) {
                 <TextField
                   error={error.category_id.length > 0 ? true : false}
                   fullWidth
-                  helperText="Please select your category"
                   helperText={error.category_id.length > 0 ? error.category_id : ''}
                   id="outlined-select-currency"
                   label="Select"
@@ -239,7 +232,6 @@ function AppEdit(props) {
                 <TextField
                   error={error.payment_type_id.length > 0 ? true : false}
                   fullWidth
-                  helperText="Please select your payment type"
                   helperText={error.payment_type_id.length > 0 ? error.payment_type_id : ''}
                   id="outlined-select-currency"
                   label="Select"
@@ -269,7 +261,6 @@ function AppEdit(props) {
                 <TextField
                   error={error.platform_id.length > 0 ? true : false}
                   fullWidth
-                  helperText="Please select your platform"
                   helperText={error.platform_id.length > 0 ? error.platform_id : ''}
                   id="outlined-select-currency"
                   label="Select"

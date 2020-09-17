@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Page } from 'components';
 import { makeStyles } from '@material-ui/styles';
 import { dataDetail } from '../../../../store/app/action';
 import { connect } from 'react-redux';
-import axios from 'utils/axios';
-import { Header, AppInfo } from './components';
+import { AppInfo } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,7 +20,8 @@ const AppDetail = ({ match, dataDetail, detail }) => {
 
   useEffect(() => {
     dataDetail(app_id, 'password')
-  }, [])
+    console.log('dataDetail')
+  }, [app_id, dataDetail])
 
 
   return (

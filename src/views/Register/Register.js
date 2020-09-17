@@ -16,6 +16,7 @@ import gradients from 'utils/gradients';
 import { Page } from 'components';
 import queryString from 'query-string';
 import { RegisterFrom, RegisterSuccess, RegisterSubmit } from './componets';
+import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -87,7 +88,6 @@ const Register = (props) => {
     const type = queryString.parse(props.location.search);
     setRoute(type.form);
     console.log(type);
-    console.log('search', props.location.search)
   }, [props]);
 
   const renderRoute = (value) => {
@@ -116,7 +116,9 @@ const Register = (props) => {
           <Typography variant="subtitle2">
             Sign up on the internal platform
           </Typography>
-          <div className="register" className={classes.registerForm}>
+          <div
+            className={clsx(classes.registerForm, 'register')}
+          >
             {renderRoute(route)}
           </div>
           <Divider className={classes.divider} />

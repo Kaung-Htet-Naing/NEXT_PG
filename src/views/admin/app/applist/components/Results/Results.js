@@ -128,34 +128,6 @@ const Results = props => {
     history.push(`/admin/app/${appID}/update`);
   }
 
-  const handleSelectAll = event => {
-    const selectedOrders = event.target.checked
-      ? appdata.map(data => data.app_id)
-      : [];
-
-    setSelectedOrders(selectedOrders);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedOrders.indexOf(id);
-    let newSelectedOrders = [];
-
-    if (selectedIndex === -1) {
-      newSelectedOrders = newSelectedOrders.concat(selectedOrders, id);
-    } else if (selectedIndex === 0) {
-      newSelectedOrders = newSelectedOrders.concat(selectedOrders.slice(1));
-    } else if (selectedIndex === selectedOrders.length - 1) {
-      newSelectedOrders = newSelectedOrders.concat(selectedOrders.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedOrders = newSelectedOrders.concat(
-        selectedOrders.slice(0, selectedIndex),
-        selectedOrders.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedOrders(newSelectedOrders);
-  };
-
   const handleChangePage = (event, page) => {
     setPage(page);
   };
@@ -182,20 +154,9 @@ const Results = props => {
     };
   }, []);
 
-  const handleButtonClick = () => {
-    if (!loading) {
-      setSuccess(false);
-      setLoading(true);
-      timer.current = setTimeout(() => {
-        setSuccess(true);
-        setLoading(false);
-      }, 2000);
-    }
-  };
-
   useEffect(() => {
     appList();
-  }, [])
+  }, [appList])
 
   useEffect(() => {
     setdatalist(appdata)

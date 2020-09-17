@@ -13,14 +13,13 @@ import {
 
 import { SnackbarProvider } from 'notistack';
 
-import {SnackBarProvider} from './context/ToastContext';
+import { SnackBarProvider } from './context/ToastContext';
 
 import theme from './theme';
 import routes from './routes';
-import Alert from './components/Alert';
 
 
-import  configureStore  from './store/store';
+import configureStore from './store/store';
 
 
 const store = configureStore();

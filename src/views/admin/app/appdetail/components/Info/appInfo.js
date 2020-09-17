@@ -1,12 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from 'react';
 import clsx from 'clsx';
-import moment from 'moment';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
-  CardActions,
   CardHeader,
   CardContent,
   Divider,
@@ -14,12 +10,8 @@ import {
   Table,
   TableBody,
   TableRow,
-  TableCell,
-  TextField,
-  Link
+  TableCell
 } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import ReceiptIcon from '@material-ui/icons/ReceiptOutlined';
 import { dataDetail } from '../../../../../../store/app/action';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';

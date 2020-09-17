@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core';
 import { Page, Paginate } from 'components';
 import { Header, ProjectCard } from './components';
 import { connect } from 'react-redux';
-import { getClientTransactions,getClientTransactionDetail} from '../../../../store/transactions/action'
+import { getClientTransactions, getClientTransactionDetail } from '../../../../store/transactions/action'
 
 
 const useStyles = makeStyles(theme => ({
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TransactionsList = (props) => {
-  const { transactionlist, getClientTransactions,  getClientTransactionDetail
+  const { transactionlist, getClientTransactions, getClientTransactionDetail
   } = props;
   const classes = useStyles();
   const [rowsPerPage] = useState(10);
@@ -31,10 +31,7 @@ const TransactionsList = (props) => {
 
   useEffect(() => {
     getClientTransactions()
-  }, []);
-
-  const handleFilter = () => { };
-  const handleSearch = () => { };
+  }, [getClientTransactions]);
 
   return (
     <Page
@@ -73,5 +70,5 @@ const mapStateToProps = ({ transactions }) => {
 }
 
 export default connect(mapStateToProps, {
-  getClientTransactions,  getClientTransactionDetail
+  getClientTransactions, getClientTransactionDetail
 })(TransactionsList);

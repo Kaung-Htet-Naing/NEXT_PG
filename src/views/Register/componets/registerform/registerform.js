@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setformregister } from "../../../../store/Register/register.action";
@@ -130,8 +130,9 @@ const RegisterForm = ({ history, setformregister, className, ...rest }) => {
 
     }
 
-
+    const { nameError, categoryError, emailError, phoneError } = errors;
     return (
+
         <form
             {...rest}
             className={clsx(classes.root, className)}
@@ -139,9 +140,8 @@ const RegisterForm = ({ history, setformregister, className, ...rest }) => {
             <div className={classes.fields}>
                 <TextField
                     fullWidth
-                    error={errors.nameError.length > 0 ? true : false}
-                    fullWidth
-                    helperText={errors.nameError.length > 0 ? errors.nameError : ''}
+                    error={nameError.length > 0 ? true : false}
+                    helperText={nameError.length > 0 ? nameError : ''}
                     label="Full Name"
                     name="username"
                     variant="outlined"
@@ -150,9 +150,8 @@ const RegisterForm = ({ history, setformregister, className, ...rest }) => {
                 />
                 <TextField
                     fullWidth
-                    error={errors.categoryError.length > 0 ? true : false}
-                    fullWidth
-                    helperText={errors.categoryError.length > 0 ? errors.categoryError : ''}
+                    error={categoryError.length > 0 ? true : false}
+                    helperText={categoryError.length > 0 ? categoryError : ''}
                     id="outlined-select-currency"
                     label="category"
                     name="category"
@@ -173,9 +172,8 @@ const RegisterForm = ({ history, setformregister, className, ...rest }) => {
                 </TextField>
                 <TextField
                     fullWidth
-                    error={errors.emailError.length > 0 ? true : false}
-                    fullWidth
-                    helperText={errors.emailError.length > 0 ? errors.emailError : ''}
+                    error={emailError.length > 0 ? true : false}
+                    helperText={emailError.length > 0 ? emailError : ''}
                     label="E-mail Address"
                     name="email"
                     variant="outlined"
@@ -184,9 +182,8 @@ const RegisterForm = ({ history, setformregister, className, ...rest }) => {
                 />
                 <TextField
                     fullWidth
-                    error={errors.phoneError.length > 0 ? true : false}
-                    fullWidth
-                    helperText={errors.phoneError.length > 0 ? errors.phoneError : ''}
+                    error={phoneError.length > 0 ? true : false}
+                    helperText={phoneError.length > 0 ? phoneError : ''}
                     label="Contact Phone"
                     name="phone"
                     variant="outlined"
@@ -196,7 +193,7 @@ const RegisterForm = ({ history, setformregister, className, ...rest }) => {
             </div>
             <Link to="/register?form=1">
                 <Button
-                    className={classes.button, classes.submitButton}
+                    className={clsx(classes.button, classes.submitButton)}
                     color="primary"
                     variant="contained"
                     onClick={handleonNext}

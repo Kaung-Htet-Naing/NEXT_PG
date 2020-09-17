@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Page } from 'components';
 import { makeStyles } from '@material-ui/styles';
 import { getClientTransactionDetail } from '../../../../store/transactions/action';
@@ -21,7 +21,7 @@ const TransationDetail = (props) => {
 
   useEffect(() => {
     getClientTransactionDetail(invoiceNo);
-  }, [])
+  }, [getClientTransactionDetail, invoiceNo])
 
   return (
     <Page

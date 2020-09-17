@@ -15,7 +15,6 @@ import LockIcon from '@material-ui/icons/Lock';
 import { Page } from 'components';
 import gradients from 'utils/gradients';
 import { LoginForm } from './components';
-import bg from '../../assets/img/logo_nexpg.png';
 
 const useStyles = makeStyles(theme => ({
   root: {
