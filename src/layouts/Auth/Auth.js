@@ -8,11 +8,8 @@ import { Topbar } from './components';
 
 const useStyles = makeStyles(theme => ({
   content: {
-    height: '100%',
-    paddingTop: 56,
-    [theme.breakpoints.up('sm')]: {
-      paddingTop: 64
-    }
+    height: '100vh',
+    marginTop: '0px'
   },
 
 }));

@@ -19,7 +19,7 @@ import bg from '../../assets/img/logo_nexpg.png';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: '100%',
+    height: '100vh',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
