@@ -11,7 +11,9 @@ import {
   POST_APP_CREATE,
   GET_APP_CATEGORIES,
   GET_APP_PAYMENTS,
-  CLEAN_ETHIC
+  CLEAN_ETHIC,
+  DELETE_APP,
+  DELETE_APP_ERROR
 } from '../types'
 
 const INITIAL_STATE = {
@@ -33,8 +35,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, detail: action.payload.data.data, status: action.payload.status };
     case APP_UPDATE:
       return { ...state, updateData: action.payload };
-    case DELETE_DATA:
-      return { ...state, res: action.payload }
+    case DELETE_APP:
+      return { ...state, status: 'DELETE' }
+    case DELETE_APP_ERROR:
+      return { ...state }
     case CLEAN_ETHIC:
       return { ...state, status: null }
     default:
