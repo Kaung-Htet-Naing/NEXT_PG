@@ -32,7 +32,7 @@ export default (state = INITIAL_STATE, action) => {
     case APP_DETAIL:
       return { ...state, detail: action.payload.data.data, status: action.payload.status };
     case APP_UPDATE:
-      return { ...state, updateData: action.payload };
+      return { ...state, status: action.payload };
     case DELETE_DATA:
       return { ...state, res: action.payload }
     case CLEAN_ETHIC:

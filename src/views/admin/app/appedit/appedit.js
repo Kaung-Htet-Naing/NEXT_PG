@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -12,6 +12,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { getAppCategories, getPaymentTypes, updateData } from '../../../../store/app/action';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { FetchContext } from '../../../../context/FetchContext';
+import { ToastContext } from '../../../../context/ToastContext';
+import { fetchData } from '../../../../store/action';
+import { withRouter } from 'react-router';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -71,11 +75,13 @@ const platformID = [
 ];
 
 function AppEdit(props) {
-  const { getAppCategories, getPaymentTypes, categories, paymentTypes, updateData, match, selectedApp
+  const { fetchData, categories, paymentTypes, updateData, match, selectedApp
   } = props;
-
+  const fetchContext = useContext(FetchContext);
+  const toastContext = useContext(ToastContext);
   const app_id = match.params.app_id;
   const classes = useStyles();
+
   const [data, setData] = useState(selectedApp);
 
   const [error, setError] = useState({
@@ -90,21 +96,33 @@ function AppEdit(props) {
   const [disable, setDisable] = useState(true);
 
   useEffect(() => {
-    getAppCategories();
-    getPaymentTypes();
-  }, [getAppCategories, getPaymentTypes]);
+    fetchData(fetchContext.getappCategories());
+    fetchData(fetchContext.getappPayments());
+  }, [fetchData, fetchContext]);
 
   useEffect(() => {
-    if (categories !== undefined && paymentTypes !== undefined) {
+    if (categories.length > 0 && paymentTypes.length > 0) {
       const cat = _.find(categories, { name: data.category });
       const pay = _.find(paymentTypes, { type: _.lowerCase(data.payment_type) });
       const plat = _.find(platformID, { label: _.replace(_.upperCase(data.platform), ' ', '') });
-      setData({
-        ...data, payment_type: pay.id, category: cat.id, platform: plat.value
-      })
-      console.log('cat', cat.id, 'pay', pay.id, 'plat', plat.value);
+      if (plat !== undefined && pay !== undefined && cat !== undefined) {
+        setData({
+          ...data, platform: plat.value, payment_type: pay.id, category: cat.id
+        })
+      }
     }
   }, [categories, paymentTypes, data])
+
+  // useEffect(() => {
+
+  //   if (status === "SUCCESS") {
+  //     toastContext.addToast('Successfully created.', 'success');
+  //     fetchData(fetchContext.cleanEthic());
+  //     history.push("/admin/app/list")
+  //   }
+  //   console.log(status);
+
+  // }, [status])
 
   useEffect(() => {
     const { app_name, frontend_url, backend_url, category, payment_type, platform } = data;
@@ -314,11 +332,9 @@ function AppEdit(props) {
 const mapStateToProps = ({ categories, paymentTypes, selectedApp }) => {
   return {
     categories: categories.categories,
-    paymentTypes: paymentTypes.payment_types,
+    paymentTypes: paymentTypes.payments,
     selectedApp: selectedApp.data
   }
 }
 
-export default connect(mapStateToProps, {
-  getAppCategories, getPaymentTypes, updateData
-})(AppEdit);
+export default withRouter(connect(mapStateToProps, { fetchData })(AppEdit));
