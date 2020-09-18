@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Card,
   CardContent,
@@ -9,8 +9,11 @@ import {
   Button
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { getAppCategories, getPaymentTypes, appCreate } from '../../../store/app/action';
+import { FetchContext } from '../../../context/FetchContext';
+import { ToastContext } from '../../../context/ToastContext';
+import { fetchData } from '../../../store/action';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,9 +72,12 @@ const platformID = [
   }
 ];
 
-function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, paymentTypes,
+function AppCreate({
+  categories, payments, fetchData, status, history
 }) {
   const classes = useStyles();
+  const fetchContext = useContext(FetchContext);
+  const toastContext = useContext(ToastContext);
   const [create, setCreate] = useState({
     name: '',
     frontend_url: '',
@@ -93,9 +99,20 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
   const [disable, setDisable] = useState(true);
 
   useEffect(() => {
-    getAppCategories();
-    getPaymentTypes();
-  }, [getAppCategories, getPaymentTypes]);
+    fetchData(fetchContext.getappCategories());
+    fetchData(fetchContext.getappPayments());
+  }, []);
+
+  useEffect(() => {
+
+    if (status === "SUCCESS") {
+      toastContext.addToast('Successfully created.', 'success');
+      fetchData(fetchContext.cleanEthic());
+      history.push("/admin/app/list")
+    }
+    console.log(status);
+
+  }, [status])
 
   useEffect(() => {
     const { name, frontend_url, backend_url, category_id, payment_type_id, platform_id } = create;
@@ -133,7 +150,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
 
     const data = create;
 
-    appCreate(data);
+    fetchData(fetchContext.appCreate(data));
 
     setCreate({
       name: '',
@@ -206,6 +223,7 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                 <TextField
                   error={error.category_id.length > 0 ? true : false}
                   fullWidth
+                  helperText="Please select your category"
                   helperText={error.category_id.length > 0 ? error.category_id : ''}
                   id="outlined-select-currency"
                   label="Select"
@@ -221,20 +239,21 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   >
                     <em>Select Category</em>
                   </MenuItem>
-                  {categories === undefined ? null : categories.map(i => (
+                  {categories.length > 0 ? categories.map(i => (
                     <MenuItem
                       key={i.id}
                       value={i.id}
                     >
                       {i.name}
                     </MenuItem>
-                  ))}
+                  )) : null}
                 </TextField>
               </div>
               <div className={classes.formGroup}>
                 <TextField
                   error={error.payment_type_id.length > 0 ? true : false}
                   fullWidth
+                  helperText="Please select your payment type"
                   helperText={error.payment_type_id.length > 0 ? error.payment_type_id : ''}
                   id="outlined-select-currency"
                   label="Select"
@@ -250,20 +269,21 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
                   >
                     <em>Select Payment Type</em>
                   </MenuItem>
-                  {paymentTypes === undefined ? null : paymentTypes.map(i => (
+                  {payments.length > 0 ? payments.map(i => (
                     <MenuItem
                       key={i.id}
                       value={i.id}
                     >
                       {i.type}
                     </MenuItem>
-                  ))}
+                  )) : null}
                 </TextField>
               </div>
               <div className={classes.formGroup}>
                 <TextField
                   error={error.platform_id.length > 0 ? true : false}
                   fullWidth
+                  helperText="Please select your platform"
                   helperText={error.platform_id.length > 0 ? error.platform_id : ''}
                   id="outlined-select-currency"
                   label="Select"
@@ -315,13 +335,12 @@ function AppCreate({ appCreate, getAppCategories, getPaymentTypes, categories, p
   );
 }
 
-const mapStateToProps = ({ categories, paymentTypes }) => {
+const mapStateToProps = ({ appdata, categories, paymentTypes }) => {
   return {
     categories: categories.categories,
-    paymentTypes: paymentTypes.payment_types
+    payments: paymentTypes.payments,
+    status: appdata.status
   }
 }
 
-export default connect(mapStateToProps, {
-  getAppCategories, getPaymentTypes, appCreate
-})(AppCreate);
+export default withRouter(connect(mapStateToProps, { fetchData })(AppCreate));

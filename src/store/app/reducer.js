@@ -1,51 +1,60 @@
 import {
   APP_CREATE,
   APP_LIST,
-  GET_APP_CATEGORIES,
-  GET_PAYMENT_TYPES,
   APP_DETAIL,
   APP_UPDATE,
   DELETE_DATA,
   SELECT_EDIT
 } from './type';
 
+import {
+  POST_APP_CREATE,
+  GET_APP_CATEGORIES,
+  GET_APP_PAYMENTS,
+  CLEAN_ETHIC
+} from '../types'
+
 const INITIAL_STATE = {
   detail: {
   },
   status: null,
-  data: []
+  data: [],
+  categories: [],
+  payments: []
 }
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case APP_LIST:
       return { ...state, data: action.payload }
-    case APP_CREATE:
-      return { ...state };
+    case POST_APP_CREATE:
+      return { ...state, status: "SUCCESS" };
     case APP_DETAIL:
       return { ...state, detail: action.payload.data.data, status: action.payload.status };
     case APP_UPDATE:
       return { ...state, updateData: action.payload };
     case DELETE_DATA:
       return { ...state, res: action.payload }
+    case CLEAN_ETHIC:
+      return { ...state, status: null }
     default:
       return state
   }
 }
 
-export const categoriesReducer = (state = {}, action) => {
+export const categoriesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_APP_CATEGORIES:
-      return { ...state, categories: action.payload };
+      return { ...state, categories: action.payload.data };
     default:
       return state;
   }
 }
 
-export const paymentTypesReducer = (state = {}, action) => {
+export const paymentTypesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case GET_PAYMENT_TYPES:
-      return { ...state, payment_types: action.payload };
+    case GET_APP_PAYMENTS:
+      return { ...state, payments: action.payload.data };
     default:
       return state;
   }
