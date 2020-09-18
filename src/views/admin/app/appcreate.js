@@ -101,7 +101,7 @@ function AppCreate({
   useEffect(() => {
     fetchData(fetchContext.getappCategories());
     fetchData(fetchContext.getappPayments());
-  }, []);
+  }, [fetchData, fetchContext]);
 
   useEffect(() => {
 

@@ -45,7 +45,7 @@ export default (state = INITIAL_STATE, action) => {
 export const categoriesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_APP_CATEGORIES:
-      return { ...state, categories: action.payload.data };
+      return { ...state, categories: [...action.payload.data] };
     default:
       return state;
   }
@@ -54,7 +54,7 @@ export const categoriesReducer = (state = INITIAL_STATE, action) => {
 export const paymentTypesReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_APP_PAYMENTS:
-      return { ...state, payments: action.payload.data };
+      return { ...state, payments: [...action.payload.data] };
     default:
       return state;
   }
