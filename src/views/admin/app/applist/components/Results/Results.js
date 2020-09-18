@@ -82,6 +82,7 @@ const Results = props => {
 
   const classes = useStyles();
   const [password, setPassword] = useState('');
+  const [appId, setappId] = useState(0);
   const [responseStatus, setResponseStatus] = useState('');
   const [open, setOpen] = useState(false);
   const [selectedOrders, setSelectedOrders] = useState([]);
@@ -92,29 +93,37 @@ const Results = props => {
   const [datalist, setdatalist] = useState([])
   const timer = useRef();
 
-  const handleInput = (event) => {
-    setPassword(event.target.value)
-  }
+  useEffect(() => {
 
-  const handleSubmit = (event, appID) => {
-    event.preventDefault();
-
-    dataDetail(appID, password);
     if (!loading) {
       setSuccess(false);
       setLoading(true);
       timer.current = setTimeout(() => {
         if (status === 200) {
-          history.push(`/admin/app/${appID}/detail`);
-          setPassword('')
+          if (appId !== 0) {
+            history.push(`/admin/app/${appId}/detail`);
+            setPassword('')
+          }
+
         }
         else {
           setResponseStatus('Wrong Password')
         }
         setSuccess(true);
         setLoading(false);
-      }, 2000);
+      }, [2000]);
     }
+
+  }, [status])
+
+  const handleInput = (event) => {
+    setPassword(event.target.value)
+  }
+
+  const handleSubmit = (event, appID) => {
+    event.preventDefault();
+    setappId(appID);
+    dataDetail(appID, password);
   }
 
   const handleDeleteSubmit = (event, appID) => {
