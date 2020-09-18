@@ -7,6 +7,10 @@ export const GET_APP_LISTING_URL = '/api/v1/app-listing';
 export const GET_APP_LISTING = 'GET_APP_LISTING';
 export const GET_APP_LISTING_ERROR = 'GET_APP_LISTING_ERROR';
 
+export const DELETE_APP_URL = '/api/v1/apps/:id/';
+export const DELETE_APP = 'DELETE_APP';
+export const DELETE_APP_ERROR = 'DELETE_APP_ERROR';
+
 
 //Category
 export const GET_APP_CATEGORIES_URL = '/api/v1/app-categories';

@@ -6,7 +6,7 @@ const { Provider } = ToastContext;
 
 const ToastProvider = ({ children, enqueueSnackbar }) => {
   const addToast = (title, color) => {
-    enqueueSnackbar(title, { variant: color, autoHideDuration: 5000 });
+    enqueueSnackbar(title, { variant: color, autoHideDuration: 3000 });
   };
 
   return (
