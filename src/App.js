@@ -20,6 +20,8 @@ import routes from './routes';
 
 
 import configureStore from './store/store';
+import { AuthProvider } from 'context/AuthContext';
+import { routWithFetchProvider as FetchProvider } from './context/FetchContext';
 
 
 const store = configureStore();
@@ -28,24 +30,28 @@ function App() {
   return (
     <StoreProvider store={store}>
       <ThemeProvider theme={theme}>
-        <SnackbarProvider
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          maxSnack={3}
-        >
-          <SnackBarProvider>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <Router>
-                <ScrollReset />
-                <GoogleAnalytics />
-                <CookiesNotification />
-                {renderRoutes(routes)}
-              </Router>
-            </MuiPickersUtilsProvider>
-          </SnackBarProvider>
-        </SnackbarProvider>
+        <Router>
+          <SnackbarProvider
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            maxSnack={3}
+          >
+            <AuthProvider>
+              <SnackBarProvider>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                  <FetchProvider>
+                    <ScrollReset />
+                    <GoogleAnalytics />
+                    <CookiesNotification />
+                    {renderRoutes(routes)}
+                  </FetchProvider>
+                </MuiPickersUtilsProvider>
+              </SnackBarProvider>
+            </AuthProvider>
+          </SnackbarProvider>
+        </Router>
       </ThemeProvider>
     </StoreProvider>
   );
