@@ -9,14 +9,13 @@ import {
   Button
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { getAppCategories, getPaymentTypes, updateData } from '../../../../store/app/action';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { FetchContext } from '../../../../context/FetchContext';
 import { ToastContext } from '../../../../context/ToastContext';
 import { fetchData } from '../../../../store/action';
 import { withRouter } from 'react-router';
-
+import { Redirect } from 'react-router-dom'
 const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
@@ -75,8 +74,7 @@ const platformID = [
 ];
 
 function AppEdit(props) {
-  const { fetchData, categories, paymentTypes, updateData, match, selectedApp
-  } = props;
+  const { fetchData, categories, paymentTypes, match, selectedApp, status, history } = props;
   const fetchContext = useContext(FetchContext);
   const toastContext = useContext(ToastContext);
   const app_id = match.params.app_id;
@@ -113,16 +111,13 @@ function AppEdit(props) {
     }
   }, [categories, paymentTypes, data])
 
-  // useEffect(() => {
-
-  //   if (status === "SUCCESS") {
-  //     toastContext.addToast('Successfully created.', 'success');
-  //     fetchData(fetchContext.cleanEthic());
-  //     history.push("/admin/app/list")
-  //   }
-  //   console.log(status);
-
-  // }, [status])
+  useEffect(() => {
+    if (status === "SUCCESS") {
+      toastContext.addToast('Successfully updated.', 'success');
+      fetchData(fetchContext.cleanEthic());
+      history.push("/admin/app/list")
+    }
+  }, [status])
 
   useEffect(() => {
     const { app_name, frontend_url, backend_url, category, payment_type, platform } = data;
@@ -158,11 +153,12 @@ function AppEdit(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    updateData(app_id, data);
+    fetchData(fetchContext.appUpdate(app_id, data));
 
-    setData(selectedApp)
   }
+  console.log(data)
 
+  if (!data.app_id) return <Redirect to='/admin/app/list' />
   return (
     <div className={classes.rootCenter} >
       <Grid
@@ -223,7 +219,7 @@ function AppEdit(props) {
                   fullWidth
                   helperText={error.category_id.length > 0 ? error.category_id : ''}
                   id="outlined-select-currency"
-                  label="Select"
+                  label="Select Category"
                   name="category_id"
                   onChange={handleChange}
                   select
@@ -252,7 +248,7 @@ function AppEdit(props) {
                   fullWidth
                   helperText={error.payment_type_id.length > 0 ? error.payment_type_id : ''}
                   id="outlined-select-currency"
-                  label="Select"
+                  label="Select Payment Type"
                   name="payment_type_id"
                   onChange={handleChange}
                   select
@@ -281,7 +277,7 @@ function AppEdit(props) {
                   fullWidth
                   helperText={error.platform_id.length > 0 ? error.platform_id : ''}
                   id="outlined-select-currency"
-                  label="Select"
+                  label="Select Platform"
                   name="platform_id"
                   onChange={handleChange}
                   select
@@ -329,11 +325,12 @@ function AppEdit(props) {
   );
 }
 
-const mapStateToProps = ({ categories, paymentTypes, selectedApp }) => {
+const mapStateToProps = ({ categories, paymentTypes, selectedApp, appdata }) => {
   return {
     categories: categories.categories,
     paymentTypes: paymentTypes.payments,
-    selectedApp: selectedApp.data
+    selectedApp: selectedApp.data,
+    status: appdata.status
   }
 }
 

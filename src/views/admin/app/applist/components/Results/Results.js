@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
@@ -29,6 +29,10 @@ import { TableEditBar } from 'components';
 import { connect } from 'react-redux';
 import { appList, dataDetail, deleteData, selectdata } from '../../../../../../store/app/action';
 import { withRouter } from 'react-router-dom';
+import { fetchData } from 'store/action';
+import { FetchContext } from 'context/FetchContext';
+import { ToastContext } from 'context/ToastContext';
+
 const useStyles = makeStyles(theme => ({
   root: {
   },
@@ -75,10 +79,12 @@ const useStyles = makeStyles(theme => ({
     marginLeft: -12,
   },
 
+
+
 }));
 
 const Results = props => {
-  const { className, appList, dataDetail, appdata, selectdata, status, history, deleteData, ...rest } = props;
+  const { className, appList, dataDetail, appdata, selectdata, status, history, deleteData, fetchData, ...rest } = props;
 
   const classes = useStyles();
   const [password, setPassword] = useState('');
@@ -90,8 +96,19 @@ const Results = props => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [disable, setDisable] = useState(false);
   const [datalist, setdatalist] = useState([])
   const timer = useRef();
+  const fetchContext = useContext(FetchContext);
+  const toastContext = useContext(ToastContext);
+
+  useEffect(() => {
+    appList();
+  }, [appList])
+
+  useEffect(() => {
+    setdatalist(appdata)
+  }, [appdata])
 
   useEffect(() => {
 
@@ -116,6 +133,30 @@ const Results = props => {
 
   }, [status])
 
+
+  useEffect(() => {
+
+    if (status === 'DELETE') {
+      appList();
+      toastContext.addToast('Successfully deleted.', 'success');
+      fetchData(fetchContext.cleanEthic());
+
+      setTimeout(() => {
+        setDisable(false);
+      }, [3000])
+
+    } else if (status !== 200) {
+
+    }
+
+  }, [status])
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
   const handleInput = (event) => {
     setPassword(event.target.value)
   }
@@ -127,8 +168,8 @@ const Results = props => {
   }
 
   const handleDeleteSubmit = (event, appID) => {
-    event.preventDefault();
-    deleteData(appID)
+    setDisable(true);
+    fetchData(fetchContext.deleteData(appID));
   }
 
   const handleEditSubmit = (event, data, appID) => {
@@ -157,19 +198,6 @@ const Results = props => {
     [classes.buttonSuccess]: success,
   });
 
-  useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    appList();
-  }, [appList])
-
-  useEffect(() => {
-    setdatalist(appdata)
-  }, [appdata])
 
   return (
     <div
@@ -281,6 +309,7 @@ const Results = props => {
                         <Button
                           onClick={(e) => handleDeleteSubmit(e, data.app_id)}
                           size="small"
+                          disabled={disable}
                           variant="contained"
                         >
                           Delete
@@ -318,5 +347,5 @@ const mapStateToProps = ({ appdata }) => {
 }
 
 export default withRouter(connect(mapStateToProps, {
-  appList, dataDetail, deleteData, selectdata
+  appList, dataDetail, deleteData, selectdata, fetchData
 })(Results));

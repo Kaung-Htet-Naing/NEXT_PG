@@ -14,9 +14,13 @@ import {
   GET_APP_PAYMENTS_URL,
   GET_APP_PAYMENTS,
   GET_APP_PAYMENTS_ERROR,
-  UPDATE_APP_URL,
+  DELETE_APP_URL,
+  DELETE_APP,
+  DELETE_APP_ERROR,
+  CLEAN_ETHIC,
   UPDATE_APP,
-  CLEAN_ETHIC
+  UPDATE_APP_URL,
+  UPDATE_APP_ERROR
 } from '../store/types';
 
 const FetchContext = createContext();
@@ -65,6 +69,12 @@ const FetchProvider = ({ children }) => {
     POST_APP_CREATE_ERROR
   ]
 
+  const deleteData = (appId) => [
+    api.delete(DELETE_APP_URL.replace(':id', appId)),
+    DELETE_APP,
+    DELETE_APP_ERROR
+  ]
+
   const getappCategories = () => [
     api.get(GET_APP_CATEGORIES_URL),
     GET_APP_CATEGORIES,
@@ -76,16 +86,17 @@ const FetchProvider = ({ children }) => {
     GET_APP_PAYMENTS,
     GET_APP_PAYMENTS_ERROR
   ]
-  const appUpdate = (data) => [
-    api.post(UPDATE_APP_URL, data),
+
+  const appUpdate = (appId, data) => [
+    api.post(UPDATE_APP_URL.replace(':id', appId), data),
     UPDATE_APP,
-    UPDATE_APP
+    UPDATE_APP_ERROR
   ]
 
   const cleanEthic = () => [
-    'CLEAN',
     CLEAN_ETHIC,
-    'CLEAN'
+    CLEAN_ETHIC,
+    CLEAN_ETHIC
   ]
 
   return (
@@ -93,6 +104,8 @@ const FetchProvider = ({ children }) => {
       appCreate,
       getappCategories,
       getappPayments,
+      deleteData,
+      appUpdate,
       cleanEthic
     }}>
       {children}
