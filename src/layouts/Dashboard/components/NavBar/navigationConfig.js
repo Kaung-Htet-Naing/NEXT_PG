@@ -55,7 +55,7 @@ export default [
         children: [
           {
             title: 'With-Draw List',
-            href: '/admin/with_draw/list'
+            href: '/admin/withdraw/list'
           }
         ]
       }
