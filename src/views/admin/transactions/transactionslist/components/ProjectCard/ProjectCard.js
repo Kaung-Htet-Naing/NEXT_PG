@@ -68,8 +68,7 @@ const ProjectCard = props => {
     Success: colors.green[600]
   };
 
-  const handleClick = (e, invoiceNo) => {
-    getClientTransactionDetail(invoiceNo);
+  const handleClick = (invoiceNo) => {
     history.push(`/admin/transaction/${invoiceNo}/detail`);
   }
 
@@ -140,7 +139,7 @@ const ProjectCard = props => {
         <div className={classes.actions}>
           <Button
             color="primary"
-            onClick={(e) => handleClick(e, data.invoice_no)}
+            onClick={() => handleClick(data.invoice_no)}
             size="small"
             variant="contained"
           >
@@ -148,7 +147,7 @@ const ProjectCard = props => {
           </Button>
         </div>
       </CardContent>
-    </Card>
+    </Card >
   );
 };
 

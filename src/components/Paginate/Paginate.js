@@ -110,7 +110,7 @@ Paginate.propTypes = {
 };
 
 Paginate.defaultProps = {
-  onPageChange: () => {},
+  onPageChange: () => { },
   pageRangeDisplayed: 5
 };
 

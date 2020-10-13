@@ -293,7 +293,7 @@ const Results = props => {
                               {loading && <CircularProgress
                                 className={classes.buttonProgress}
                                 size={24}
-                              />}
+                                          />}
                             </div>
                           </DialogActions>
                         </Dialog>
@@ -307,9 +307,9 @@ const Results = props => {
                           Edit
                         </Button>
                         <Button
+                          disabled={disable}
                           onClick={(e) => handleDeleteSubmit(e, data.app_id)}
                           size="small"
-                          disabled={disable}
                           variant="contained"
                         >
                           Delete

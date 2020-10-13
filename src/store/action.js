@@ -1,12 +1,13 @@
 export const fetchData = (data) => async (dispatch) => {
   const response = await data[0];
-  console.log("RESPONSE ", response);
+  console.log('RESPONSE ', response);
   try {
     dispatch({
       type: data[1],
       payload: response.data
     });
   } catch (error) {
+    console.log(error)
     dispatch({
       type: data[2]
     })

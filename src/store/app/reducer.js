@@ -13,7 +13,7 @@ import {
   GET_APP_PAYMENTS,
   CLEAN_ETHIC,
   DELETE_APP,
-  DELETE_APP_ERROR
+  DELETE_APP_ERROR,
 } from '../types'
 
 const INITIAL_STATE = {
@@ -30,11 +30,11 @@ export default (state = INITIAL_STATE, action) => {
     case APP_LIST:
       return { ...state, data: action.payload }
     case POST_APP_CREATE:
-      return { ...state, status: "SUCCESS" };
+      return { ...state, status: 'SUCCESS' };
     case APP_DETAIL:
       return { ...state, detail: action.payload.data.data, status: action.payload.status };
     case APP_UPDATE:
-      return { ...state, status: "SUCCESS" };
+      return { ...state, status: 'SUCCESS' };
     case DELETE_APP:
       return { ...state, status: 'DELETE' }
     case DELETE_APP_ERROR:

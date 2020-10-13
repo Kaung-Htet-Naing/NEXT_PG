@@ -105,10 +105,10 @@ function AppCreate({
 
   useEffect(() => {
 
-    if (status === "SUCCESS") {
+    if (status === 'SUCCESS') {
       toastContext.addToast('Successfully created.', 'success');
       fetchData(fetchContext.cleanEthic());
-      history.push("/admin/app/list")
+      history.push('/admin/app/list')
     }
     console.log(status);
 
@@ -164,7 +164,6 @@ function AppCreate({
   }
 
   return (
-
     <div className={classes.rootCenter} >
       <Grid
         item

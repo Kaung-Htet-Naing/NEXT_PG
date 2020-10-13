@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { Page } from 'components';
 import { makeStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
-import { TransationInfo } from './components';
+import { WithDrawInfo } from '../../withdraw/withdrawdetail/components';
 import { FetchContext } from '../../../../context/FetchContext';
 import { fetchData } from '../../../../store/action';
 
@@ -15,32 +15,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TransationDetail = ({ fetchData, detail, match }) => {
+const WithDrawDetail = ({ detail, match, fetchData }) => {
   const classes = useStyles();
-  const invoiceNo = match.params.invoice_no;
+  const withDrawID = match.params.id;
   const fetchContext = useContext(FetchContext);
 
-
   useEffect(() => {
-    fetchData(fetchContext.getClientTransactionsDetail(invoiceNo))
+    fetchData(fetchContext.getWithDrawDetail(withDrawID))
   }, [])
 
 
   return (
     <Page
       className={classes.root}
-      title="Transation Detail"
+      title="WithDraw Detail"
     >
-      <TransationInfo detail={detail} />
+      <WithDrawInfo detail={detail} />
     </Page>
   )
 }
 
-const mapStateToProps = ({ transactions }) => {
+const mapStateToProps = ({ withDraw }) => {
   return ({
-    detail: transactions.detail.data
+    detail: withDraw.detail.data
   })
 }
 export default connect(mapStateToProps, {
   fetchData
-})(TransationDetail);
+})(WithDrawDetail);

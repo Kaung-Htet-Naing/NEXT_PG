@@ -1,14 +1,34 @@
 import {
-  GET_TRANSACTIONS,
-  TRANSACTOIN_DETAIL
-} from './type';
+  GET_CLIENT_TRANSACTIONS,
+  GET_CLIENT_TRANSACTIONS_DETAIL,
+  GET_CLIENT_TRANSACTIONS_PAGINATION
+} from '../types'
 
-export const clientTransactionsReducer = (state = { transactionlist: [] }, action) => {
+const initialState = {
+  list: [],
+  detail: {},
+  links: {},
+  meta: {}
+}
+
+export const clientTransactionsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_TRANSACTIONS:
-      return { ...state, transactionlist: action.payload };
-    case TRANSACTOIN_DETAIL:
-      return { ...state, transactiondetail: action.payload }
+    case GET_CLIENT_TRANSACTIONS:
+      return {
+        ...state,
+        list: action.payload.data,
+        links: action.payload.links,
+        meta: action.payload.meta
+      };
+    case GET_CLIENT_TRANSACTIONS_PAGINATION:
+      return {
+        ...state,
+        list: action.payload.data,
+        links: action.payload.links,
+        meta: action.payload.meta
+      };
+    case GET_CLIENT_TRANSACTIONS_DETAIL:
+      return { ...state, detail: action.payload }
     default:
       return { ...state }
   }

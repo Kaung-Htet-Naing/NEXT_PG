@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -9,6 +9,7 @@ import {
   colors
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -58,7 +59,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ProjectCard = props => {
-  const { data, getClientTransactionDetail, history, className, ...rest } = props;
+  const { data, getWithDrawDetail, className, fetchData, list, ...rest } = props;
 
   const classes = useStyles();
 
@@ -67,11 +68,6 @@ const ProjectCard = props => {
     'Fail': colors.red[600],
     Success: colors.green[600]
   };
-
-  const handleClick = (e, invoiceNo) => {
-    getClientTransactionDetail(invoiceNo);
-    history.push(`/admin/transaction/${invoiceNo}/detail`);
-  }
 
   return (
     <Card
@@ -86,65 +82,40 @@ const ProjectCard = props => {
         </div>
         <div className={classes.stats}>
           <Typography >
-            {data.invoice_no}
+            {data.wallet_id}
           </Typography>
         </div>
         <div className={classes.stats}>
-          <Typography >{data.wallet_id}</Typography>
+          <Typography >{data.amount}</Typography>
         </div>
         <div className={classes.stats}>
           <Typography >
-            {data.app_id}
-          </Typography>
-        </div>
-        <div className={classes.stats}>
-          <Typography >
-            {data.amount}
+            {data.payment_slip}
           </Typography>
         </div>
         <div className={classes.stats}>
           <Typography >
-            {data.transaction_fee}
-          </Typography>
-        </div>
-        <div className={classes.stats}>
-          <Typography >
-            {data.net_amount}
-          </Typography>
-        </div>
-        <div className={classes.stats}>
-          <Typography >
-            {data.currency_code}
-          </Typography>
-        </div>
-        <div className={classes.stats}>
-          <Typography >
-            {data.payment_type}
-          </Typography>
-        </div>
-        <div className={classes.stats}>
-          <Typography style={{ color: statusColors[data.status] }}>
             {data.status}
           </Typography>
         </div>
         <div className={classes.stats}>
           <Typography >
-            {data.description}
+            {data.status_message}
           </Typography>
         </div>
         <div className={classes.stats}>
-          <Typography variant="h6">
+          <Typography >
             {data.created_at}
           </Typography>
         </div>
         <div className={classes.actions}>
           <Button
             color="primary"
-            onClick={(e) => handleClick(e, data.invoice_no)}
+            onClick={() => getWithDrawDetail(data.id)}
             size="small"
             variant="contained"
           >
-            View
+            Detail
           </Button>
         </div>
       </CardContent>

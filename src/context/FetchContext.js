@@ -17,10 +17,34 @@ import {
   DELETE_APP_URL,
   DELETE_APP,
   DELETE_APP_ERROR,
-  CLEAN_ETHIC,
   UPDATE_APP,
   UPDATE_APP_URL,
-  UPDATE_APP_ERROR
+  UPDATE_APP_ERROR,
+  GET_CLIENT_TRANSACTIONS_URL,
+  GET_CLIENT_TRANSACTIONS,
+  GET_CLIENT_TRANSACTIONS_ERROR,
+  GET_CLIENT_TRANSACTIONS_PAGINATION_URL,
+  GET_CLIENT_TRANSACTIONS_PAGINATION,
+  GET_CLIENT_TRANSACTIONS_PAGINATION_ERROR,
+  GET_CLIENT_TRANSACTIONS_DETAIL_URL,
+  GET_CLIENT_TRANSACTIONS_DETAIL,
+  GET_CLIENT_TRANSACTIONS_DETAIL_ERROR,
+  GET_WITH_DRAW_LIST_URL,
+  GET_WITH_DRAW_LIST,
+  GET_WITH_DRAW_LIST_ERROR,
+  GET_WITH_DRAW_LIST_PAGINATION_URL,
+  GET_WITH_DRAW_LIST_PAGINATION,
+  GET_WITH_DRAW_LIST_PAGINATION_ERROR,
+  GET_WITH_DRAW_DETAIL_URL,
+  GET_WITH_DRAW_DETAIL,
+  GET_WITH_DRAW_DETAIL_ERROR,
+  GET_WITH_DRAW_TRANSACTIONS_LIST_URL,
+  GET_WITH_DRAW_TRANSACTIONS_LIST,
+  GET_WITH_DRAW_TRANSACTIONS_LIST_ERROR,
+  POST_WITH_DRAW_CLOSE_URL,
+  POST_WITH_DRAW_CLOSE,
+  POST_WITH_DRAW_CLOSE_ERROR,
+  CLEAN_ETHIC
 } from '../store/types';
 
 const FetchContext = createContext();
@@ -63,6 +87,8 @@ const FetchProvider = ({ children }) => {
     }
   )
 
+
+  //Apps
   const appCreate = (data) => [
     api.post(POST_APP_CREATE_URL, data),
     POST_APP_CREATE,
@@ -93,6 +119,56 @@ const FetchProvider = ({ children }) => {
     UPDATE_APP_ERROR
   ]
 
+  //Client Transactions
+  const getClientTransactions = () => [
+    api.get(GET_CLIENT_TRANSACTIONS_URL),
+    GET_CLIENT_TRANSACTIONS,
+    GET_CLIENT_TRANSACTIONS_ERROR
+  ]
+
+  const getClientTransactionsPagination = (pageNo) => [
+    api.get(GET_CLIENT_TRANSACTIONS_PAGINATION_URL + pageNo),
+    GET_CLIENT_TRANSACTIONS_PAGINATION,
+    GET_CLIENT_TRANSACTIONS_PAGINATION_ERROR
+  ]
+
+  const getClientTransactionsDetail = (invoice_no) => [
+    api.get(GET_CLIENT_TRANSACTIONS_DETAIL_URL.replace(':invoice_no', invoice_no)),
+    GET_CLIENT_TRANSACTIONS_DETAIL,
+    GET_CLIENT_TRANSACTIONS_DETAIL_ERROR
+  ]
+
+  //WithDraws
+  const getWithDrawList = () => [
+    api.get(GET_WITH_DRAW_LIST_URL),
+    GET_WITH_DRAW_LIST,
+    GET_WITH_DRAW_LIST_ERROR
+  ]
+
+  const getWithDrawListPagination = (pageNo) => [
+    api.get(GET_WITH_DRAW_LIST_PAGINATION_URL + pageNo),
+    GET_WITH_DRAW_LIST_PAGINATION,
+    GET_WITH_DRAW_LIST_PAGINATION_ERROR
+  ]
+
+  const getWithDrawDetail = (withdrawID) => [
+    api.get(GET_WITH_DRAW_DETAIL_URL.replace(':id', withdrawID)),
+    GET_WITH_DRAW_DETAIL,
+    GET_WITH_DRAW_DETAIL_ERROR
+  ]
+
+  const getWithDrawTransactionLIst = (withdrawID) => [
+    api.get(GET_WITH_DRAW_TRANSACTIONS_LIST_URL.replace(':id', withdrawID)),
+    GET_WITH_DRAW_TRANSACTIONS_LIST,
+    GET_WITH_DRAW_TRANSACTIONS_LIST_ERROR
+  ]
+
+  const closeWithDraw = (withdrawID) => [
+    api.post(POST_WITH_DRAW_CLOSE_URL.replace(':id', withdrawID)),
+    POST_WITH_DRAW_CLOSE,
+    POST_WITH_DRAW_CLOSE_ERROR
+  ]
+
   const cleanEthic = () => [
     CLEAN_ETHIC,
     CLEAN_ETHIC,
@@ -100,14 +176,24 @@ const FetchProvider = ({ children }) => {
   ]
 
   return (
-    <Provider value={{
-      appCreate,
-      getappCategories,
-      getappPayments,
-      deleteData,
-      appUpdate,
-      cleanEthic
-    }}>
+    <Provider
+      value={{
+        appCreate,
+        getappCategories,
+        getappPayments,
+        deleteData,
+        appUpdate,
+        getClientTransactions,
+        getClientTransactionsPagination,
+        getClientTransactionsDetail,
+        getWithDrawList,
+        getWithDrawListPagination,
+        getWithDrawDetail,
+        getWithDrawTransactionLIst,
+        closeWithDraw,
+        cleanEthic
+      }}
+    >
       {children}
     </Provider>
   )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 
@@ -6,7 +6,8 @@ import { Page, Paginate } from 'components';
 import { Header, ProjectCard } from './components';
 import { connect } from 'react-redux';
 import { getClientTransactions, getClientTransactionDetail } from '../../../../store/transactions/action'
-
+import { FetchContext } from '../../../../context/FetchContext';
+import { fetchData } from '../../../../store/action';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,16 +23,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const TransactionsList = (props) => {
-  const { transactionlist, getClientTransactions, getClientTransactionDetail
-  } = props;
+const TransactionsList = ({ list, fetchData, links, meta
+}) => {
   const classes = useStyles();
-  const [rowsPerPage] = useState(10);
-  const [page] = useState(0);
+  const fetchContext = useContext(FetchContext);
+  const [transactionsList, setTransactionslist] = useState([]);
+  const { current_page, last_page, total } = meta;
 
   useEffect(() => {
-    getClientTransactions()
-  }, [getClientTransactions]);
+    fetchData(fetchContext.getClientTransactions())
+  }, []);
+
+  useEffect(() => {
+    setTransactionslist(list)
+  }, [list])
+
+  const onPaginationChange = ({ selected }) => {
+    const pageNo = selected + 1;
+    fetchData(fetchContext.getClientTransactionsPagination(pageNo))
+  }
+
+  console.log('links', links);
+  console.log('meta', meta)
 
   return (
     <Page
@@ -45,19 +58,22 @@ const TransactionsList = (props) => {
           gutterBottom
           variant="body2"
         >
-          {transactionlist.length} Records found. Page {page + 1} of{' '}
-          {Math.ceil(transactionlist.length / rowsPerPage)}
+          {total} Records found. Page {current_page} of{' '}
+          {last_page}
         </Typography>
-        {transactionlist.map(data => (
+        {transactionsList.map(data => (
           <ProjectCard
             data={data}
-            getClientTransactionDetail={getClientTransactionDetail}
             key={data.id}
           />
         ))}
       </div>
       <div className={classes.paginate}>
-        <Paginate pageCount={3} />
+        {total > 15 && <Paginate
+          onPageChange={onPaginationChange}
+          pageCount={3}
+        />
+        }
       </div>
     </Page>
   );
@@ -65,10 +81,12 @@ const TransactionsList = (props) => {
 
 const mapStateToProps = ({ transactions }) => {
   return {
-    transactionlist: transactions.transactionlist,
+    list: transactions.list,
+    links: transactions.links,
+    meta: transactions.meta
   }
 }
 
 export default connect(mapStateToProps, {
-  getClientTransactions, getClientTransactionDetail
+  getClientTransactions, getClientTransactionDetail, fetchData
 })(TransactionsList);
