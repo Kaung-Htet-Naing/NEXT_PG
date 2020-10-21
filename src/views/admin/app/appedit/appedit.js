@@ -112,10 +112,10 @@ function AppEdit(props) {
   }, [categories, paymentTypes, data])
 
   useEffect(() => {
-    if (status === "SUCCESS") {
+    if (status === 'SUCCESS') {
       toastContext.addToast('Successfully updated.', 'success');
       fetchData(fetchContext.cleanEthic());
-      history.push("/admin/app/list")
+      history.push('/admin/app/list')
     }
   }, [status])
 
@@ -156,9 +156,8 @@ function AppEdit(props) {
     fetchData(fetchContext.appUpdate(app_id, data));
 
   }
-  console.log(data)
 
-  if (!data.app_id) return <Redirect to='/admin/app/list' />
+  if (!data.app_id) return <Redirect to="/admin/app/list" />
   return (
     <div className={classes.rootCenter} >
       <Grid

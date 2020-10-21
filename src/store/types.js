@@ -7,6 +7,10 @@ export const GET_APP_LISTING_URL = '/api/v1/app-listing';
 export const GET_APP_LISTING = 'GET_APP_LISTING';
 export const GET_APP_LISTING_ERROR = 'GET_APP_LISTING_ERROR';
 
+export const GET_APP_DETAIL_URL = '/api/v1/apps/:app_id/detail';
+export const GET_APP_DETAIL = 'GET_APP_DETAIL';
+export const GET_APP_DETAIL_ERROR = 'GET_APP  _DETAIL_ERROR';
+
 export const UPDATE_APP_URL = '/api/v1/apps/:id/update';
 export const UPDATE_APP = 'UPDATE_APP';
 export const UPDATE_APP_ERROR = 'UPDATE_APP_ERROR';

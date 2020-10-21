@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import clsx from 'clsx';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
@@ -21,13 +21,11 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-  CircularProgress,
+  DialogTitle
 } from '@material-ui/core';
 import { indigo } from '@material-ui/core/colors';
-import { TableEditBar } from 'components';
 import { connect } from 'react-redux';
-import { appList, dataDetail, deleteData, selectdata } from '../../../../../../store/app/action';
+import { selectdata } from '../../../../../../store/app/action';
 import { withRouter } from 'react-router-dom';
 import { fetchData } from 'store/action';
 import { FetchContext } from 'context/FetchContext';
@@ -57,12 +55,6 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(1),
     position: 'relative',
   },
-  buttonSuccess: {
-    backgroundColor: indigo[500],
-    '&:hover': {
-      backgroundColor: indigo[500],
-    },
-  },
   fabProgress: {
     color: indigo[500],
     position: 'absolute',
@@ -84,7 +76,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Results = props => {
-  const { className, appList, dataDetail, appdata, selectdata, status, history, deleteData, fetchData, ...rest } = props;
+  const { className,  appdata, selectdata,detail, status, history,  fetchData, ...rest } = props;
 
   const classes = useStyles();
   const [password, setPassword] = useState('');
@@ -94,68 +86,40 @@ const Results = props => {
   const [selectedOrders, setSelectedOrders] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [disable, setDisable] = useState(false);
   const [datalist, setdatalist] = useState([])
-  const timer = useRef();
   const fetchContext = useContext(FetchContext);
   const toastContext = useContext(ToastContext);
 
   useEffect(() => {
-    appList();
-  }, [appList])
+    fetchData(fetchContext.appList());
+  }, [])
 
   useEffect(() => {
     setdatalist(appdata)
   }, [appdata])
 
-  useEffect(() => {
-
-    if (!loading) {
-      setSuccess(false);
-      setLoading(true);
-      timer.current = setTimeout(() => {
-        if (status === 200) {
-          if (appId !== 0) {
-            history.push(`/admin/app/${appId}/detail`);
-            setPassword('')
-          }
-
-        }
-        else {
-          setResponseStatus('Wrong Password')
-        }
-        setSuccess(true);
-        setLoading(false);
-      }, [2000]);
+  useEffect( ()=>{
+    if(detail.app_id !== undefined){
+      history.push(`/admin/app/${appId}/detail`);
+      setPassword('')
     }
-
-  }, [status])
-
+    else {
+      setResponseStatus('Wrong Password')
+    }
+  },[detail])
 
   useEffect(() => {
-
     if (status === 'DELETE') {
-      appList();
+      fetchData(fetchContext.appList());
       toastContext.addToast('Successfully deleted.', 'success');
       fetchData(fetchContext.cleanEthic());
-
       setTimeout(() => {
         setDisable(false);
-      }, [3000])
-
-    } else if (status !== 200) {
-
+      }, [2000])
     }
-
   }, [status])
 
-  useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
 
   const handleInput = (event) => {
     setPassword(event.target.value)
@@ -164,7 +128,12 @@ const Results = props => {
   const handleSubmit = (event, appID) => {
     event.preventDefault();
     setappId(appID);
-    dataDetail(appID, password);
+
+    try {
+      fetchData(fetchContext.appDetail(appID, password))
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const handleDeleteSubmit = (event, appID) => {
@@ -193,11 +162,6 @@ const Results = props => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const buttonClassname = clsx({
-    [classes.buttonSuccess]: success,
-  });
-
 
   return (
     <div
@@ -282,18 +246,12 @@ const Results = props => {
                             </Button>
                             <div className={classes.wrapper}>
                               <Button
-                                className={buttonClassname}
                                 color="primary"
-                                disabled={loading}
                                 onClick={(e) => handleSubmit(e, data.app_id)}
                                 variant="contained"
                               >
                                 Submit
                               </Button>
-                              {loading && <CircularProgress
-                                className={classes.buttonProgress}
-                                size={24}
-                                          />}
                             </div>
                           </DialogActions>
                         </Dialog>
@@ -325,7 +283,7 @@ const Results = props => {
         <CardActions className={classes.actions}>
           <TablePagination
             component="div"
-            count={appdata.length}
+            count={datalist.length}
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
             page={page}
@@ -334,18 +292,18 @@ const Results = props => {
           />
         </CardActions>
       </Card>
-      <TableEditBar selected={selectedOrders} />
     </div>
   );
 };
 
 const mapStateToProps = ({ appdata }) => {
   return {
-    appdata: appdata.data,
+    appdata: appdata.list,
     status: appdata.status,
+    detail:appdata.detail
   }
 }
 
 export default withRouter(connect(mapStateToProps, {
-  appList, dataDetail, deleteData, selectdata, fetchData
+  selectdata, fetchData
 })(Results));

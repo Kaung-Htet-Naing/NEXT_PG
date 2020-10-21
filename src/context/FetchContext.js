@@ -8,6 +8,12 @@ import {
   POST_APP_CREATE_URL,
   POST_APP_CREATE,
   POST_APP_CREATE_ERROR,
+  GET_APP_LISTING_URL,
+  GET_APP_LISTING,
+  GET_APP_LISTING_ERROR,
+  GET_APP_DETAIL_URL,
+  GET_APP_DETAIL,
+  GET_APP_DETAIL_ERROR,
   GET_APP_CATEGORIES_URL,
   GET_APP_CATEGORIES,
   GET_APP_CATEGORIES_ERROR,
@@ -81,7 +87,7 @@ const FetchProvider = ({ children }) => {
       const code = error && error.response ? error.response.status : 0;
       if (code === 401 || code === 403) {
         authContext.logout();
-        enqueueSnackbar('This is a success message!', { variant: 'success' });
+        enqueueSnackbar('Token is expired !', { variant: 'success' });
       }
       return Promise.reject(error);
     }
@@ -93,6 +99,18 @@ const FetchProvider = ({ children }) => {
     api.post(POST_APP_CREATE_URL, data),
     POST_APP_CREATE,
     POST_APP_CREATE_ERROR
+  ]
+
+  const appList = () => [
+    api.get(GET_APP_LISTING_URL),
+    GET_APP_LISTING,
+    GET_APP_LISTING_ERROR
+  ]
+
+  const appDetail = (app_id,password) => [
+    api.post(GET_APP_DETAIL_URL.replace(':app_id',app_id),{'password':password}),
+    GET_APP_DETAIL,
+    GET_APP_DETAIL_ERROR
   ]
 
   const deleteData = (appId) => [
@@ -179,7 +197,9 @@ const FetchProvider = ({ children }) => {
     <Provider
       value={{
         appCreate,
+        appList,
         getappCategories,
+        appDetail,
         getappPayments,
         deleteData,
         appUpdate,

@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     maxWidth: '100%',
-    width: 240,
+    width: 80,
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
       marginBottom: theme.spacing(2),
@@ -64,9 +64,10 @@ const ProjectCard = props => {
   const classes = useStyles();
 
   const statusColors = {
-    'Pending': colors.orange[600],
-    'Fail': colors.red[600],
-    Success: colors.green[600]
+    1: colors.blue[600],
+    2: colors.red[600],
+    3: colors.orange[600],
+    4: colors.green[600]
   };
 
   return (
@@ -75,38 +76,45 @@ const ProjectCard = props => {
       className={clsx(classes.root, className)}
     >
       <CardContent className={classes.content}>
-        <div className={classes.stats}>
+        <div className={classes.header}>
           <Typography>
             {data.id}
           </Typography>
         </div>
         <div className={classes.stats}>
-          <Typography >
-            {data.wallet_id}
-          </Typography>
+          <Typography
+            style={{fontWeight:'550'}}
+            variant="h6"
+          >{data.wallet_id}</Typography>
+          <Typography variant="body2">Wallet Id</Typography>
         </div>
         <div className={classes.stats}>
-          <Typography >{data.amount}</Typography>
+          <Typography
+            style={{fontWeight:'550'}}
+            variant="h6"
+          >{data.amount}</Typography>
+          <Typography variant="body2">Amount</Typography>
         </div>
         <div className={classes.stats}>
-          <Typography >
-            {data.payment_slip}
-          </Typography>
+          <Typography
+            style={{ color: statusColors[data.status] ,fontWeight:'550'}}
+            variant="h6"
+          >{data.status}</Typography>
+          <Typography variant="body2">Status</Typography>
         </div>
         <div className={classes.stats}>
-          <Typography >
-            {data.status}
-          </Typography>
+          <Typography
+            style={{fontWeight:'550'}}
+            variant="h6"
+          >{data.status_message}</Typography>
+          <Typography variant="body2">Status Message</Typography>
         </div>
         <div className={classes.stats}>
-          <Typography >
-            {data.status_message}
-          </Typography>
-        </div>
-        <div className={classes.stats}>
-          <Typography >
-            {data.created_at}
-          </Typography>
+          <Typography
+            style={{fontWeight:'550'}}
+            variant="h6"
+          >{data.created_at}</Typography>
+          <Typography variant="body2">Created At</Typography>
         </div>
         <div className={classes.actions}>
           <Button

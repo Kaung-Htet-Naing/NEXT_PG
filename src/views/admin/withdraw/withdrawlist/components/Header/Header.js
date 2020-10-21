@@ -40,23 +40,10 @@ const Header = props => {
             Lists
           </Typography>
         </Grid>
-        <Grid item>
-          <Button
-            color="primary"
-            component={RouterLink}
-            to="/projects/create"
-            variant="contained"
-          >
-            Add project
-          </Button>
-        </Grid>
       </Grid>
     </div>
   );
 };
 
-Header.propTypes = {
-  className: PropTypes.string
-};
 
 export default Header;

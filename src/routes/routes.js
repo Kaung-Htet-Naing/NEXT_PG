@@ -110,9 +110,9 @@ const routes = [
         component: lazy(() => import('../views/admin/withdraw/withdrawlist/withdrawlist'))
       },
       {
-        path: '/admin/withdraw/:id/detail',
+        path: '/admin/withdraw/:id/:tab',
         exact: true,
-        component: lazy(() => import('../views/admin/withdraw/withdrawdetail/withdrawdetail'))
+        component: lazy(() => import('../views/admin/withdraw/CustomerManagementDetails'))
       },
       {
         component: () => <Redirect to="/errors/error-404" />

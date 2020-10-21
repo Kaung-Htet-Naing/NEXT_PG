@@ -8,9 +8,12 @@ import {
 
 const initialState = {
   list: [],
-  detail: {},
+  detail: {data:{payment_slip:''}},
   links: {},
-  meta: {}
+  meta: {},
+  WTlist:[],
+  close:{},
+  status:0
 }
 
 export const withDrawReducer = (state = initialState, action) => {
@@ -30,9 +33,9 @@ export const withDrawReducer = (state = initialState, action) => {
         meta: action.payload.meta
       };
     case GET_WITH_DRAW_DETAIL:
-      return { ...state, detail: action.payload };
+      return { ...state, detail: action.payload,status:action.payload.data.status };
     case GET_WITH_DRAW_TRANSACTIONS_LIST:
-      return { ...state, transactionsList: action.payload };
+      return { ...state, WTlist: action.payload.data };
     case POST_WITH_DRAW_CLOSE:
       return { ...state, close: action.payload };
     default:

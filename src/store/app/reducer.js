@@ -1,39 +1,36 @@
 import {
-  APP_CREATE,
-  APP_LIST,
-  APP_DETAIL,
-  APP_UPDATE,
-  DELETE_DATA,
   SELECT_EDIT
 } from './type';
 
 import {
   POST_APP_CREATE,
   GET_APP_CATEGORIES,
+  GET_APP_DETAIL,
+  GET_APP_LISTING,
   GET_APP_PAYMENTS,
   CLEAN_ETHIC,
   DELETE_APP,
+  UPDATE_APP,
   DELETE_APP_ERROR,
 } from '../types'
 
 const INITIAL_STATE = {
-  detail: {
-  },
+  detail: {  },
   status: null,
-  data: [],
+  list: [],
   categories: [],
   payments: []
 }
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case APP_LIST:
-      return { ...state, data: action.payload }
+    case GET_APP_LISTING:
+      return { ...state, list: action.payload.data,status:action.payload.status }
     case POST_APP_CREATE:
       return { ...state, status: 'SUCCESS' };
-    case APP_DETAIL:
-      return { ...state, detail: action.payload.data.data, status: action.payload.status };
-    case APP_UPDATE:
+    case GET_APP_DETAIL:
+      return { ...state, detail: action.payload.data };
+    case UPDATE_APP:
       return { ...state, status: 'SUCCESS' };
     case DELETE_APP:
       return { ...state, status: 'DELETE' }

@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 
 import { Page } from 'components';
-import { Header, Results } from './components';
+import {  Results,Header } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,7 +21,7 @@ const AppList = () => {
       className={classes.root}
       title="App List"
     >
-      <Header />  
+      <Header/>
       <Results
         className={classes.results}
       />

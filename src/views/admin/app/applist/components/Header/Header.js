@@ -26,20 +26,27 @@ const Header = props => {
       >
         <Grid item>
           <Typography
+            component="h2"
+            gutterBottom
+            variant="overline"
+          >
+            App
+          </Typography>
+          <Typography
             component="h1"
             variant="h3"
           >
-            App List
+            Lists
           </Typography>
         </Grid>
         <Grid item>
-          <Link to='/admin/app/create'>
+          <Link to="/admin/app/create">
             <Button
               color="primary"
               variant="contained"
             >
               Add App
-          </Button>
+            </Button>
           </Link>
         </Grid>
       </Grid>

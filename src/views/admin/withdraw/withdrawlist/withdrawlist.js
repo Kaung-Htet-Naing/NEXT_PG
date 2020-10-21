@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const WithDrawList = ({ list, links, meta, fetchData, history }) => {
+const WithDrawList = ({ list,  meta, fetchData, history }) => {
   const classes = useStyles();
   const fetchContext = useContext(FetchContext);
   const [withDrawlist, setWithDrawList] = useState([]);

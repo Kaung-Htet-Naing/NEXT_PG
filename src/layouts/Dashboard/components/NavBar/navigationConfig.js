@@ -41,10 +41,6 @@ export default [
           {
             title: 'Transaction List',
             href: '/admin/transaction/list'
-          },
-          {
-            title: 'Transaction Create',
-            href: '/admin/transaction/create'
           }
         ]
       },
