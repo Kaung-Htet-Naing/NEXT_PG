@@ -39,6 +39,6 @@ export const withDrawReducer = (state = initialState, action) => {
     case POST_WITH_DRAW_CLOSE:
       return { ...state, close: action.payload };
     default:
-      return { ...initialState };
+      return { ...state };
   }
 }

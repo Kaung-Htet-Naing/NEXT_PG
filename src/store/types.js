@@ -64,5 +64,15 @@ export const POST_WITH_DRAW_CLOSE_URL = '/api/v1/withdraws/:id/close'
 export const POST_WITH_DRAW_CLOSE = 'POST_WITH_DRAW_CLOSE'
 export const POST_WITH_DRAW_CLOSE_ERROR = 'POST_WITH_DRAW_CLOSE_ERROR'
 
+//Issue-Tracker
+
+export const GET_ISSUES_LIST_URL = '/api/v1/issues'
+export const GET_ISSUES_LIST = 'GET_ISSUES_LIST'
+export const GET_ISSUES_LIST_ERROR = 'GET_ISSUES_LIST_ERROR'
+
+export const POST_ISSUES_CREATE_URL = '/api/v1/issues'
+export const POST_ISSUES_CREATE = 'POST_ISSUES_CREATE'
+export const POST_ISSUES_CREATE_ERROR = 'POST_ISSUES_CREATE_ERROR'
+
 //CLEAN
 export const CLEAN_ETHIC = 'CLEAN_ETHIC';

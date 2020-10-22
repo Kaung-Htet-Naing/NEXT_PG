@@ -7,6 +7,7 @@ import HomeIcon from '@material-ui/icons/HomeOutlined';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import BugReportIcon from '@material-ui/icons/BugReport';
 import { Label } from 'components';
 
 export default [
@@ -54,6 +55,11 @@ export default [
             href: '/admin/withdraw/list'
           }
         ]
+      },
+      {
+        title: 'Issue Feed',
+        href: '/admin/issue-feed',
+        icon: BugReportIcon,
       }
     ]
   },

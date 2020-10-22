@@ -50,6 +50,12 @@ import {
   POST_WITH_DRAW_CLOSE_URL,
   POST_WITH_DRAW_CLOSE,
   POST_WITH_DRAW_CLOSE_ERROR,
+  GET_ISSUES_LIST_URL,
+  GET_ISSUES_LIST,
+  GET_ISSUES_LIST_ERROR,
+  POST_ISSUES_CREATE_URL,
+  POST_ISSUES_CREATE,
+  POST_ISSUES_CREATE_ERROR,
   CLEAN_ETHIC
 } from '../store/types';
 
@@ -187,6 +193,20 @@ const FetchProvider = ({ children }) => {
     POST_WITH_DRAW_CLOSE_ERROR
   ]
 
+  //Issue-Tracker
+
+  const getIssuesList = () =>[
+    api.get(GET_ISSUES_LIST_URL),
+    GET_ISSUES_LIST,
+    GET_ISSUES_LIST_ERROR
+  ]
+
+  const postIssuesCreate = (issueData) =>[
+    api.post(POST_ISSUES_CREATE_URL,issueData),
+    POST_ISSUES_CREATE,
+    POST_ISSUES_CREATE_ERROR
+  ]
+
   const cleanEthic = () => [
     CLEAN_ETHIC,
     CLEAN_ETHIC,
@@ -211,6 +231,8 @@ const FetchProvider = ({ children }) => {
         getWithDrawDetail,
         getWithDrawTransactionLIst,
         closeWithDraw,
+        getIssuesList,
+        postIssuesCreate,
         cleanEthic
       }}
     >

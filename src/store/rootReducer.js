@@ -7,6 +7,7 @@ import { paymentTypesReducer } from './app/reducer';
 import { selectedDataReducer } from './app/reducer';
 import { clientTransactionsReducer } from './transactions/reducer';
 import { withDrawReducer } from './withDraw/reducer'
+import { issueTrackerReducer } from './issuetracker/reducer'
 import userReducer from './user/reducer';
 
 const rootReducer = combineReducers({
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   paymentTypes: paymentTypesReducer,
   selectedApp: selectedDataReducer,
   transactions: clientTransactionsReducer,
-  withDraw: withDrawReducer
+  withDraw: withDrawReducer,
+  issues:issueTrackerReducer
 })
 
 export default rootReducer;

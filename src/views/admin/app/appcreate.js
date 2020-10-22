@@ -171,7 +171,6 @@ function AppCreate({
         sm={2}
         xs={1}
       />
-
       <Grid
         item
         md={8}
@@ -319,11 +318,9 @@ function AppCreate({
                 Send
               </Button>
             </form>
-
           </CardContent>
         </Card>
       </Grid>
-
       <Grid
         item
         md={2}
