@@ -98,7 +98,6 @@ const SubmitRegister = ({ history, newprops, setformregister, className, ...rest
       ...file,
       NRCFile: e.target.files[0]
     })
-
   };
 
   const FormUploadfile = e => {
@@ -215,7 +214,7 @@ const SubmitRegister = ({ history, newprops, setformregister, className, ...rest
         />
         <TextField
           fullWidth
-          label="Company Registratin Number"
+          label="Company Registrating Number"
           name="company_Number"
           onChange={handleOnChange}
           variant="outlined"

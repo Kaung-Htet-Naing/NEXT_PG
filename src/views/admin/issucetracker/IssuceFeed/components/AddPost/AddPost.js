@@ -15,11 +15,13 @@ import {
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { ToastContext } from '../../../../../../context/ToastContext';
 import { FetchContext } from '../../../../../../context/FetchContext';
+import { AuthContext } from '../../../../../../context/AuthContext';
+
 import { fetchData } from '../../../../../../store/action';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -56,6 +58,7 @@ const useStyles = makeStyles(theme => ({
 const AddPost = props => {
   const { className,fetchData, ...rest } = props;
 
+  const authContext = useContext(AuthContext);
   const classes = useStyles();
   const fileInputRef = useRef(null);
   const [value, setValue] = useState('');
@@ -65,8 +68,7 @@ const AddPost = props => {
   const toastContext = useContext(ToastContext);
   const [issues,setIssues] = useState({
     title:'',
-    description:'',
-    imageFile:''
+    description:''
   })
 
   const handleChange = event => {
@@ -74,15 +76,13 @@ const AddPost = props => {
 
     event.preventDefault();
     setIssues({...issues,[name]:value})
-    console.log(name)
-    console.log(value)
-    console.log(issues)
   };
 
   const handleImageUploadChange = e => {
+
     setIssues({
       ...issues,
-      imageFile: e.target.files[0]
+      [e.target.name]: e.target.files[0]
     })
     console.log(e.target.files)
   };
@@ -90,6 +90,34 @@ const AddPost = props => {
   const handleAttach = () => {
     fileInputRef.current.click();
   };
+
+  const handleSubmit = async (event)=>{
+    event.preventDefault();
+
+    const fd=new FormData();
+    fd.append('title',issues.title);
+    fd.append('description',issues.description)
+    if(issues.imageFile){
+      fd.append('photo',issues.imageFile)
+    }
+    fd.append('photo',issues.imageFile)
+    console.log(fd)
+
+    try {
+      const config = {
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data',
+          'Authorization' : `Bearer ${authContext.authState.token}`
+        },
+        url: '/api/v1/issues',
+        data: fd,
+      }
+      const response = await axios(config);
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <Card
@@ -118,9 +146,16 @@ const AddPost = props => {
             />
           </div>
           <div className={classes.content}>
+            <input
+              className={classes.fileInput}
+              id="image-file"
+              name="imageFile"
+              onChange={handleImageUploadChange}
+              ref={fileInputRef}
+              type="file"
+            />
             <label htmlFor="image-file">
               <Tooltip
-                id="image-file"
                 title="Attach Image"
               >
                 <IconButton
@@ -131,20 +166,13 @@ const AddPost = props => {
                 </IconButton>
               </Tooltip>
             </label>
-            <input
-              className={classes.fileInput}
-              id="image-file"
-              name="imageFile"
-              onClick={handleImageUploadChange}
-              ref={fileInputRef}
-              type="file"
-            />
             <Divider className={classes.divider} />
             <Tooltip title="Send">
               <Button
                 className={classes.button}
                 color="primary"
-                endIcon={<Icon>send</Icon>}
+                endIcon={<SendIcon/>}
+                onClick={handleSubmit}
                 variant="contained"
               >
                 Send
@@ -152,7 +180,6 @@ const AddPost = props => {
             </Tooltip>
           </div>
         </form>
-
       </CardContent>
     </Card>
   );
