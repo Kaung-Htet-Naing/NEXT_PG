@@ -80,10 +80,8 @@ const ProjectCard = props => {
   const [disable, setDisable] = useState(false);
   const [password, setPassword] = useState('');
   const [appId, setappId] = useState(0);
-  const [datalist, setdatalist] = useState([])
   const [responseStatus, setResponseStatus] = useState('');
   const timer = useRef();
-
 
   // useEffect(() => {
 
@@ -108,28 +106,22 @@ const ProjectCard = props => {
   // }, [status])
 
   useEffect(() => {
-
     if (status === 'DELETE') {
       toastContext.addToast('Successfully deleted.', 'success');
       fetchData(fetchContext.cleanEthic());
 
       setTimeout(() => {
         setDisable(false);
-      }, [3000])
-
-    } else if (status !== 200) {
-
+      }, [1000])
     }
-
   }, [status])
 
 
-  useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
-
+  // useEffect(() => {
+  //   return () => {
+  //     clearTimeout(timer.current);
+  //   };
+  // }, []);
 
   const handleEditSubmit = (event, data, appID) => {
     event.preventDefault();
@@ -150,6 +142,7 @@ const ProjectCard = props => {
     event.preventDefault();
     setappId(appID);
     fetchData(fetchContext.appDetail(appID, password))
+    console.log('hao')
   }
 
   const handleClickOpen = () => {

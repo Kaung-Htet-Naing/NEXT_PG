@@ -7,9 +7,10 @@ export const fetchData = (data) => async (dispatch) => {
       payload: response.data
     });
   } catch (error) {
-    console.log(error)
+    console.log('errror',error)
     dispatch({
-      type: data[2]
+      type: data[2],
+      payload: error
     })
   }
 }

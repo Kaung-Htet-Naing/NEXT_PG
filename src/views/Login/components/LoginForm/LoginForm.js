@@ -1,16 +1,19 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
-import validate from 'validate.js';
+import React, { useState, useEffect,useContext } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/styles';
 import { Button, TextField } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
-import useRouter from 'utils/useRouter';
-import auth from '../../../../Auth';
-import { setToken } from '../../../../store/LocalStorage/LocalStorage';
+import { connect } from 'react-redux';
+
 import Axios from 'axios';
+
+import { setToken } from '../../../../store/LocalStorage/LocalStorage';
+import auth from '../../../../Auth';
+
+import { FetchContext } from '../../../../context/FetchContext';
+import { fetchData } from '../../../../store/action';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -30,9 +33,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoginForm = props => {
-  const { className, ...rest } = props;
+  const { className,fetchData,login,error, ...rest } = props;
   const { history } = props;
   const classes = useStyles();
+  const fetchContext = useContext(FetchContext);
 
   const [inputvalues, setinputvalues] = useState({
     email: '',
@@ -63,7 +67,6 @@ const LoginForm = props => {
       default:
         break;
     }
-
     setloginerror(loginerror);
   };
 
@@ -85,10 +88,10 @@ const LoginForm = props => {
 
   const handlesubmit = async (e) => {
     e.preventDefault();
+
     const res = await Axios.get(
       'https://geolocation-db.com/json/697de680-a737-11ea-9820-af05f4014d91'
     );
-    console.log(res.data);
     let OSName = '';
     if (navigator.appVersion.indexOf('Win') !== -1) OSName = 'Windows';
     if (navigator.appVersion.indexOf('X11') !== -1) OSName = 'UNIX';
@@ -113,36 +116,29 @@ const LoginForm = props => {
       browser: browserName,
       operating_system: OSName,
     };
-    const config = {
-      method: 'POST',
-      url: '/api/v1/client-login',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      data,
-    };
+
     const validatinlogin = loginvalidate();
 
     if (validatinlogin) {
-      try {
-        const req = await Axios(config);
-        console.log(req);
-        if (req.status === 200) {
-          console.log('req', req);
-          const { token } = req.data.data;
-          setToken(token);
-          console.log(req);
-          auth.login(() => {
-            history.push('/admin');
-          });
-        }
-      } catch (error) {
-        console.log(error);
-        const emailandpassworderror = '*  email and password wrong';
-        setloginerror({ emailandpassworderror });
-      }
+      fetchData(fetchContext.login(data))
     }
   };
+
+  useEffect(()=>{
+    if (login.success === true) {
+      console.log('login', login);
+      const { token } = login.data;
+      setToken(token);
+      auth.login(() => {
+        history.push('/admin');
+      });
+    }
+  },[login])
+
+  useEffect(()=>{
+    console.log(error)
+  },[error])
+
   return (
     <form
       {...rest}
@@ -155,9 +151,9 @@ const LoginForm = props => {
           fullWidth
           label="Email address"
           name="email"
-          variant="outlined"
-          value={inputvalues.email}
           onChange={handleonchange}
+          value={inputvalues.email}
+          variant="outlined"
         />
         <TextField
           // error={loginerror.passwordError.length > 0 ? true : false}
@@ -165,19 +161,20 @@ const LoginForm = props => {
           fullWidth
           label="Password"
           name="password"
-          type="password"
-          variant="outlined"
-          value={inputvalues.password}
           onChange={handleonchange}
+          type="password"
+          value={inputvalues.password}
+          variant="outlined"
         />
       </div>
       <Button
         className={classes.submitButton}
         color="secondary"
+        onClick={handlesubmit}
         size="large"
         type="submit"
         variant="contained"
-        onClick={handlesubmit}>
+      >
         Sign in
       </Button>
     </form>
@@ -188,4 +185,14 @@ LoginForm.propTypes = {
   className: PropTypes.string
 };
 
-export default withRouter(LoginForm);
+const mapStateToProps = ({authentication})=>{
+  return {
+    login:authentication.login,
+    error : authentication.error
+  }
+}
+
+
+export default withRouter(
+  connect(mapStateToProps,
+    {fetchData})(LoginForm));

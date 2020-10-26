@@ -65,7 +65,6 @@ export const POST_WITH_DRAW_CLOSE = 'POST_WITH_DRAW_CLOSE'
 export const POST_WITH_DRAW_CLOSE_ERROR = 'POST_WITH_DRAW_CLOSE_ERROR'
 
 //Issue-Tracker
-
 export const GET_ISSUES_LIST_URL = '/api/v1/issues'
 export const GET_ISSUES_LIST = 'GET_ISSUES_LIST'
 export const GET_ISSUES_LIST_ERROR = 'GET_ISSUES_LIST_ERROR'
@@ -73,6 +72,11 @@ export const GET_ISSUES_LIST_ERROR = 'GET_ISSUES_LIST_ERROR'
 export const POST_ISSUES_CREATE_URL = '/api/v1/issues'
 export const POST_ISSUES_CREATE = 'POST_ISSUES_CREATE'
 export const POST_ISSUES_CREATE_ERROR = 'POST_ISSUES_CREATE_ERROR'
+
+//Authentication
+export const POST_CLIENT_LOGIN_URL = '/api/v1/client-login'
+export const POST_CLIENT_LOGIN = 'POST_CLIENT_LOGIN'
+export const POST_CLIENT_LOGIN_ERROR = 'POST_CLIENT_LOGIN_ERROR'
 
 //CLEAN
 export const CLEAN_ETHIC = 'CLEAN_ETHIC';

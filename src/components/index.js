@@ -14,6 +14,8 @@ export { default as TableEditBar } from './TableEditBar';
 export { default as PricingModal } from './PricingModal';
 export { default as Paginate } from './Paginate';
 export { default as FilesDropzone } from './FilesDropzone';
+export { default as EnhancedTableHead } from './TableHead';
+
 
 
 

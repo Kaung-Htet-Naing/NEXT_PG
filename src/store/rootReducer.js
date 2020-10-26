@@ -9,11 +9,13 @@ import { clientTransactionsReducer } from './transactions/reducer';
 import { withDrawReducer } from './withDraw/reducer'
 import { issueTrackerReducer } from './issuetracker/reducer'
 import userReducer from './user/reducer';
+import { AuthenticationReducer } from './login/reducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
   main: mainReducer,
   reigsterform: registerFormreducer,
+  authentication:AuthenticationReducer,
   appdata: appReducer,
   categories: categoriesReducer,
   paymentTypes: paymentTypesReducer,

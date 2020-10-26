@@ -1,19 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import clsx from 'clsx';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
   Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Divider,
   Typography,
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TablePagination,
   TableRow,
   TextField,
@@ -23,60 +15,95 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core';
-import { indigo } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
+
+import TableContainer from '@material-ui/core/TableContainer';
+import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import ReactExport from 'react-export-excel';
+
 import { selectdata } from '../../../../../../store/app/action';
 import { withRouter } from 'react-router-dom';
 import { fetchData } from 'store/action';
 import { FetchContext } from 'context/FetchContext';
 import { ToastContext } from 'context/ToastContext';
+import {EnhancedTableHead} from 'components';
 
-const useStyles = makeStyles(theme => ({
+
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
+
+const headCells = [
+  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
+  { id: 'key', numeric: false, disablePadding: false, label: 'Key' },
+  { id: 'category', numeric: false, disablePadding: false, label: 'Category' },
+  { id: 'payment_type', numeric: false, disablePadding: false, label: 'Payment Type' },
+  { id: 'actions', numeric: false, disablePadding: false, label: '' }
+];
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
+const useStyles = makeStyles((theme) => ({
   root: {
+    width: '100%',
   },
-  filterButton: {
-    marginRight: theme.spacing(2)
+  paper: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
   },
-  content: {
-    padding: 0
+  table: {
+    minWidth: 750,
   },
-  inner: {
-    minWidth: 1150
-  },
-  nameCell: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  actions: {
-    padding: theme.spacing(0, 1),
-    justifyContent: 'flex-end'
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  fabProgress: {
-    color: indigo[500],
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
     position: 'absolute',
-    top: -6,
-    left: -6,
-    zIndex: 1,
+    top: 20,
+    width: 1,
   },
-  buttonProgress: {
-    color: indigo[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
+  toolbarroot: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
   },
-
-
-
+  title: {
+    flex: '1 1 100%',
+  }
 }));
 
 const Results = props => {
-  const { className,  appdata, selectdata,detail, status, history,  fetchData, ...rest } = props;
+  const {  applist, selectdata,detail, status, history,  fetchData, ...rest } = props;
 
   const classes = useStyles();
   const [password, setPassword] = useState('');
@@ -87,7 +114,10 @@ const Results = props => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [disable, setDisable] = useState(false);
-  const [datalist, setdatalist] = useState([])
+  const [list, setdatalist] = useState([])
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('name');
+
   const fetchContext = useContext(FetchContext);
   const toastContext = useContext(ToastContext);
 
@@ -96,8 +126,8 @@ const Results = props => {
   }, [])
 
   useEffect(() => {
-    setdatalist(appdata)
-  }, [appdata])
+    setdatalist(applist)
+  }, [applist])
 
   useEffect( ()=>{
     if(detail.app_id !== undefined){
@@ -151,10 +181,6 @@ const Results = props => {
     setPage(page);
   };
 
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(event.target.value);
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -163,45 +189,117 @@ const Results = props => {
     setOpen(false);
   };
 
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, list.length - page * rowsPerPage);
+
   return (
-    <div
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <Typography
-        color="textSecondary"
-        gutterBottom
-        variant="body2"
-      >
-        {datalist.length} Records found. Page {page + 1} of{' '}
-        {Math.ceil(datalist.length / rowsPerPage)}
-      </Typography>
-      <Card>
-        <CardHeader />
-        <Divider />
-        <CardContent className={classes.content}>
-          <PerfectScrollbar>
-            <div className={classes.inner}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Key</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Payment Type</TableCell>
-                    <TableCell
-                      align="center"
-                      colSpan={2}
-                    >Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {datalist.slice(0, rowsPerPage).map(data => (
+    <div className={classes.root}>
+      <Paper className={classes.paper} >
+        <Toolbar className={classes.toolbarroot}>
+          <Typography
+            className={classes.title}
+            component="div"
+            id="tableTitle"
+            variant="h4"
+          >
+          APP LIST
+          </Typography>
+          <Tooltip title="ExcelExport">
+            <IconButton aria-label="excelexport">
+              <ExcelFile
+                element={<GetAppIcon />}
+                filename="WithDraw Transaction Table"
+              >
+                <ExcelSheet
+                  data={list}
+                  name="App List"
+                >
+                  <ExcelColumn
+                    label="App Name"
+                    value="app_name"
+                  />
+                  <ExcelColumn
+                    label="App Id"
+                    value="app_id"
+                  />
+                  <ExcelColumn
+                    label="Client Name"
+                    value="client_name"
+                  />
+                  <ExcelColumn
+                    label="Category"
+                    value="category"
+                  />
+                  <ExcelColumn
+                    label="Payment Type"
+                    value="payment_type"
+                  />
+                  <ExcelColumn
+                    label="Platform"
+                    value="platform"
+                  />
+                  <ExcelColumn
+                    label="App Type"
+                    value="app_type"
+                  />
+                  <ExcelColumn
+                    label="Transaction Fee"
+                    value="transaction_fee"
+                  />
+                  <ExcelColumn
+                    label="Frontend Url"
+                    value="frontend_url"
+                  />
+                  <ExcelColumn
+                    label="backend_url"
+                    value="Backend Url"
+                  />
+                </ExcelSheet>
+              </ExcelFile>
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+        <TableContainer>
+          <Table
+            aria-label="enhanced table"
+            aria-labelledby="tableTitle"
+            className={classes.table}
+          >
+            <EnhancedTableHead
+              classes={classes}
+              headCells={headCells}
+              onRequestSort={handleRequestSort}
+              order={order}
+              orderBy={orderBy}
+            />
+            <TableBody>
+              {stableSort(list, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((data) => {
+                  return (
                     <TableRow
-                      key={data.app_id}
-                      selected={selectedOrders.indexOf(data.id) !== -1}
+                      hover
+                      key={data.id}
+                      role="checkbox"
+                      tabIndex={-1}
                     >
-                      <TableCell>{data.app_name}</TableCell>
+                      <TableCell
+                        component="th"
+                        padding="1px"
+                        scope="row"
+                      >
+                        {data.app_name}
+                      </TableCell>
                       <TableCell>{data.app_id}</TableCell>
                       <TableCell>{data.category}</TableCell>
                       <TableCell>
@@ -273,32 +371,35 @@ const Results = props => {
                           Delete
                         </Button>
                       </TableCell>
+
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </PerfectScrollbar>
-        </CardContent>
-        <CardActions className={classes.actions}>
-          <TablePagination
-            component="div"
-            count={datalist.length}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            rowsPerPageOptions={[5, 10, 25]}
-          />
-        </CardActions>
-      </Card>
+                  );
+                })}
+              {emptyRows > 0 && (
+                <TableRow >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component="div"
+          count={list.length}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}
+        />
+      </Paper>
     </div>
   );
 };
 
 const mapStateToProps = ({ appdata }) => {
   return {
-    appdata: appdata.list,
+    applist: appdata.list,
     status: appdata.status,
     detail:appdata.detail
   }

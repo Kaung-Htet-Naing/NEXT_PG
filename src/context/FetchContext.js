@@ -56,6 +56,9 @@ import {
   POST_ISSUES_CREATE_URL,
   POST_ISSUES_CREATE,
   POST_ISSUES_CREATE_ERROR,
+  POST_CLIENT_LOGIN_URL,
+  POST_CLIENT_LOGIN,
+  POST_CLIENT_LOGIN_ERROR,
   CLEAN_ETHIC
 } from '../store/types';
 
@@ -91,14 +94,17 @@ const FetchProvider = ({ children }) => {
     },
     error => {
       const code = error && error.response ? error.response.status : 0;
+      console.log(error.response)
       if (code === 401 || code === 403) {
         authContext.logout();
         enqueueSnackbar('Token is expired !', { variant: 'success' });
       }
+      if (code === 404) {
+        enqueueSnackbar(`${error.response.data.message}`, { variant: 'error' });
+      }
       return Promise.reject(error);
     }
   )
-
 
   //Apps
   const appCreate = (data) => [
@@ -194,7 +200,6 @@ const FetchProvider = ({ children }) => {
   ]
 
   //Issue-Tracker
-
   const getIssuesList = () =>[
     api.get(GET_ISSUES_LIST_URL),
     GET_ISSUES_LIST,
@@ -205,6 +210,13 @@ const FetchProvider = ({ children }) => {
     api.post(POST_ISSUES_CREATE_URL,issueData),
     POST_ISSUES_CREATE,
     POST_ISSUES_CREATE_ERROR
+  ]
+
+  //Client-Login
+  const  login = (loginData) =>[
+    api.post(POST_CLIENT_LOGIN_URL,loginData),
+    POST_CLIENT_LOGIN,
+    POST_CLIENT_LOGIN_ERROR
   ]
 
   const cleanEthic = () => [
@@ -233,6 +245,7 @@ const FetchProvider = ({ children }) => {
         closeWithDraw,
         getIssuesList,
         postIssuesCreate,
+        login,
         cleanEthic
       }}
     >

@@ -8,44 +8,46 @@ const AUTH_TOKEN = 'apiToken';
 
 const AuthProvider = ({ children }) => {
 
- const history = useHistory();
- const token = localStorage.getItem(AUTH_TOKEN);
+  const history = useHistory();
+  const token = localStorage.getItem(AUTH_TOKEN);
 
- const [authState, setAuthState] = useState({
-  token
- })
+  const [authState, setAuthState] = useState({
+    token
+  })
 
- const setAuthInfo = ({ token }) => {
-  localStorage.setItem(AUTH_TOKEN, token);
+  const setAuthInfo = ({ token }) => {
+    localStorage.setItem(AUTH_TOKEN, token);
 
-  setAuthState({
-   token
-  });
- }
-
- const logout = () => {
-  history.push('/auth/login');
-  localStorage.removeItem(AUTH_TOKEN);
-  setAuthState({});
- }
-
- const isAuthenticated = () => {
-  if (!authState.token) {
-   return false;
+    setAuthState({
+      token
+    });
   }
-  return true;
- };
 
- return (
-  <Provider value={{
-   authState,
-   setAuthState: authInfo => setAuthInfo(authInfo),
-   logout,
-   isAuthenticated
-  }}>
-   {children}
-  </Provider>
- )
+  const logout = () => {
+    history.push('/auth/login');
+    localStorage.removeItem(AUTH_TOKEN);
+    setAuthState({});
+  }
+
+  const isAuthenticated = () => {
+    if (!authState.token) {
+      return false;
+    }
+    return true;
+  };
+
+  return (
+    <Provider
+      value={{
+        authState,
+        setAuthState: authInfo => setAuthInfo(authInfo),
+        logout,
+        isAuthenticated
+      }}
+    >
+      {children}
+    </Provider>
+  )
 
 }
 

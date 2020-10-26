@@ -4,10 +4,8 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Paper from '@material-ui/core/Paper';
 import Tooltip from '@material-ui/core/Tooltip';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,9 +13,12 @@ import IconButton from '@material-ui/core/IconButton';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import Typography from '@material-ui/core/Typography';
 import ReactExport from 'react-export-excel';
+
 import { connect } from 'react-redux';
 import { FetchContext } from '../../../../../../context/FetchContext';
 import { fetchData } from '../../../../../../store/action';
+import {EnhancedTableHead} from 'components';
+
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -60,41 +61,6 @@ const headCells = [
   { id: 'net_amount', numeric: true, disablePadding: false, label: 'Net Amount' },
   { id: 'status', numeric: true, disablePadding: false, label: 'Status' }
 ];
-
-function EnhancedTableHead(props) {
-  const { classes,  order, orderBy, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow>
-        {headCells.map((headCell) => (
-          <TableCell
-            align={headCell.numeric ? 'right' : 'left'}
-            key={headCell.id}
-            padding={headCell.disablePadding ? '1px' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -241,6 +207,7 @@ function WithDrawTransactions({fetchData,list,id}) {
           >
             <EnhancedTableHead
               classes={classes}
+              headCells={headCells}
               onRequestSort={handleRequestSort}
               order={order}
               orderBy={orderBy}
