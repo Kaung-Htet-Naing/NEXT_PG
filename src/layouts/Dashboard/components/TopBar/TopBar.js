@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect,useContext } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -32,6 +32,7 @@ import useRouter from 'utils/useRouter';
 import { NotificationsPopover } from 'components';
 import { logout } from '../../../../store/user/action';
 import logo from 'assets/img/logo_nexpg.png'
+import { AuthContext } from '../../../../context/AuthContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -107,14 +108,14 @@ const TopBar = props => {
   const [searchValue, setSearchValue] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [openNotifications, setOpenNotifications] = useState(false);
+  const authContext = useContext(AuthContext);
 
   useEffect(() => {
 
   }, []);
 
   const handleLogout = () => {
-    history.push('/auth/login');
-    // dispatch(logout());
+    authContext.logout();
   };
 
   const handleNotificationsOpen = () => {
@@ -158,8 +159,8 @@ const TopBar = props => {
       <Toolbar>
         <RouterLink to="/">
           <img
-            className={classes.logo}
             alt="Logo"
+            className={classes.logo}
             src={logo}
           />
         </RouterLink>

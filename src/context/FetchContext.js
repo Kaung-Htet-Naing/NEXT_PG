@@ -59,6 +59,7 @@ import {
   POST_CLIENT_LOGIN_URL,
   POST_CLIENT_LOGIN,
   POST_CLIENT_LOGIN_ERROR,
+  CLEAR_STATUS,
   CLEAN_ETHIC
 } from '../store/types';
 
@@ -225,6 +226,13 @@ const FetchProvider = ({ children }) => {
     CLEAN_ETHIC
   ]
 
+  //CLEAN_STATUS
+  const cleanStatus = () => [
+    CLEAR_STATUS,
+    CLEAR_STATUS,
+    CLEAR_STATUS
+  ]
+
   return (
     <Provider
       value={{
@@ -246,6 +254,7 @@ const FetchProvider = ({ children }) => {
         getIssuesList,
         postIssuesCreate,
         login,
+        cleanStatus,
         cleanEthic
       }}
     >

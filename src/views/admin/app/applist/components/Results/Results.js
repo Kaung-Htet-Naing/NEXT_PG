@@ -74,6 +74,7 @@ const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    paddingTop:20
   },
   paper: {
     width: '100%',
@@ -107,10 +108,8 @@ const Results = props => {
 
   const classes = useStyles();
   const [password, setPassword] = useState('');
-  const [appId, setappId] = useState(0);
-  const [responseStatus, setResponseStatus] = useState('');
+  const [appId, setappId] = useState(null);
   const [open, setOpen] = useState(false);
-  const [selectedOrders, setSelectedOrders] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [disable, setDisable] = useState(false);
@@ -132,10 +131,8 @@ const Results = props => {
   useEffect( ()=>{
     if(detail.app_id !== undefined){
       history.push(`/admin/app/${appId}/detail`);
-      setPassword('')
-    }
-    else {
-      setResponseStatus('Wrong Password')
+      setPassword(null)
+      setappId(null)
     }
   },[detail])
 
@@ -161,6 +158,7 @@ const Results = props => {
 
     try {
       fetchData(fetchContext.appDetail(appID, password))
+
     } catch (error) {
       console.log(error)
     }

@@ -1,16 +1,20 @@
-import { POST_CLIENT_LOGIN,POST_CLIENT_LOGIN_ERROR } from '../types';
+import {
+  POST_CLIENT_LOGIN,
+  POST_CLIENT_LOGIN_ERROR,
+  CLEAR_STATUS
+} from '../types';
 
 const initialState = {
-  login:{},
-  error : null
+  login:{success:false}
 }
 
 export const AuthenticationReducer = (state=initialState,action)=>{
   switch(action.type){
     case POST_CLIENT_LOGIN:
       return {...state,login:action.payload};
-    case POST_CLIENT_LOGIN_ERROR:
-      return {...state,error : action.payload}
+    case CLEAR_STATUS :
+      console.log('hay')
+      return {...state,login:{success:false}};
     default :
       return {...state}
   }

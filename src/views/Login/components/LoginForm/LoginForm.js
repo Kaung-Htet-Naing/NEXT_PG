@@ -9,10 +9,8 @@ import { connect } from 'react-redux';
 
 import Axios from 'axios';
 
-import { setToken } from '../../../../store/LocalStorage/LocalStorage';
-import auth from '../../../../Auth';
-
 import { FetchContext } from '../../../../context/FetchContext';
+import { AuthContext } from '../../../../context/AuthContext';
 import { fetchData } from '../../../../store/action';
 
 const useStyles = makeStyles(theme => ({
@@ -33,10 +31,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoginForm = props => {
-  const { className,fetchData,login,error, ...rest } = props;
+  const { className,fetchData,login, ...rest } = props;
   const { history } = props;
   const classes = useStyles();
   const fetchContext = useContext(FetchContext);
+  const authContext = useContext(AuthContext);
+
 
   const [inputvalues, setinputvalues] = useState({
     email: '',
@@ -126,18 +126,15 @@ const LoginForm = props => {
 
   useEffect(()=>{
     if (login.success === true) {
-      console.log('login', login);
       const { token } = login.data;
-      setToken(token);
-      auth.login(() => {
-        history.push('/admin');
-      });
+      authContext.setAuthState(token)
+      history.push('/admin');
+      fetchData(fetchContext.cleanStatus());
+      setinputvalues({
+        email: '',
+        password: ''})
     }
   },[login])
-
-  useEffect(()=>{
-    console.log(error)
-  },[error])
 
   return (
     <form
@@ -187,8 +184,7 @@ LoginForm.propTypes = {
 
 const mapStateToProps = ({authentication})=>{
   return {
-    login:authentication.login,
-    error : authentication.error
+    login:authentication.login
   }
 }
 

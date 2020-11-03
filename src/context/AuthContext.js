@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
     token
   })
 
-  const setAuthInfo = ({ token }) => {
+  const setAuthInfo = (token ) => {
     localStorage.setItem(AUTH_TOKEN, token);
 
     setAuthState({
@@ -24,9 +24,10 @@ const AuthProvider = ({ children }) => {
   }
 
   const logout = () => {
-    history.push('/auth/login');
     localStorage.removeItem(AUTH_TOKEN);
     setAuthState({});
+    history.push('/auth/login');
+
   }
 
   const isAuthenticated = () => {

@@ -24,6 +24,7 @@ const AppList = () => {
       <Header/>
       <Results
         className={classes.results}
+        style={{paddingTop:20}}
       />
     </Page>
   );

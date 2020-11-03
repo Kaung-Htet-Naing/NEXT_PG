@@ -78,5 +78,10 @@ export const POST_CLIENT_LOGIN_URL = '/api/v1/client-login'
 export const POST_CLIENT_LOGIN = 'POST_CLIENT_LOGIN'
 export const POST_CLIENT_LOGIN_ERROR = 'POST_CLIENT_LOGIN_ERROR'
 
+
+//CLEAR_STATUS
+
+export const CLEAR_STATUS = 'CLEAR_STATUS'
+
 //CLEAN
 export const CLEAN_ETHIC = 'CLEAN_ETHIC';

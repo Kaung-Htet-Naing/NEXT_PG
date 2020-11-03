@@ -14,10 +14,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AppDetail = ({  detail}) => {
+const AppDetail = ({  detail ,match}) => {
   const classes = useStyles();
 
-  if (!detail.app_id) return <Redirect to="/admin/app/list" />
+  const id = match.params.app_id;
+
+  if (!detail.app_id ) return <Redirect to="/admin/app/list" />
 
   return (
     <Page
