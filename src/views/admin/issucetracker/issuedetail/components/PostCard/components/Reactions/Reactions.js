@@ -4,16 +4,11 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
   Typography,
-  Button,
   IconButton,
   Tooltip,
   colors
 } from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import RemoveRedEyeSharpIcon from '@material-ui/icons/RemoveRedEyeSharp';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,18 +31,13 @@ const Reactions = props => {
   const { post, className, ...rest } = props;
 
   const classes = useStyles();
-  const history = useHistory();
-
-  const viewDetail = (id)=>{
-    history.push(`/admin/issue-feed/detail/${id}`)
-  }
 
   return (
     <div
       {...rest}
       className={clsx(classes.root, className)}
     >
-      {post.merchant_need_reply && (
+      {!post.merchant_need_reply && (
         <div>
           <Tooltip title="Unlike">
             <IconButton
@@ -65,15 +55,6 @@ const Reactions = props => {
           </Typography>
         </div>
       ) }
-      <Button
-        className={classes.shareButton}
-        onClick={viewDetail}
-        size="small"
-        variant="contained"
-      >
-        <RemoveRedEyeSharpIcon className={classes.viewIcon} />
-        View
-      </Button>
     </div>
   );
 };

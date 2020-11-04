@@ -56,6 +56,21 @@ import {
   POST_ISSUES_CREATE_URL,
   POST_ISSUES_CREATE,
   POST_ISSUES_CREATE_ERROR,
+  GET_ISSUE_DETAIL_URL,
+  GET_ISSUE_DETAIL,
+  GET_ISSUE_DETAIL_ERROR,
+  GET_COMMENTS_LIST_URL,
+  GET_COMMENTS_LIST,
+  GET_COMMENTS_LIST_ERROR,
+  POST_COMMENT_CREATE_URL,
+  POST_COMMENT_CREATE,
+  POST_COMMENT_CREATE_ERROR,
+  POST_COMMENT_EDIT_URL,
+  POST_COMMENT_EDIT,
+  POST_COMMENT_EDIT_ERROR,
+  DELETE_COMMENT_URL,
+  DELETE_COMMENT,
+  DELETE_COMMENT_ERROR,
   POST_CLIENT_LOGIN_URL,
   POST_CLIENT_LOGIN,
   POST_CLIENT_LOGIN_ERROR,
@@ -213,6 +228,36 @@ const FetchProvider = ({ children }) => {
     POST_ISSUES_CREATE_ERROR
   ]
 
+  const getIssueDetail = (id) =>[
+    api.get(GET_ISSUE_DETAIL_URL.replace(':id', id)),
+    GET_ISSUE_DETAIL,
+    GET_ISSUE_DETAIL_ERROR
+  ]
+
+  const getCommentsList = (id)=>[
+    api.get(GET_COMMENTS_LIST_URL.replace(':id', id)),
+    GET_COMMENTS_LIST,
+    GET_COMMENTS_LIST_ERROR
+  ]
+
+  const postCommentCreate = (id,data)=>[
+    api.post(POST_COMMENT_CREATE_URL.replace(':id', id),data),
+    POST_COMMENT_CREATE,
+    POST_COMMENT_CREATE_ERROR
+  ]
+
+  const postCommentEdit = (id,data)=>[
+    api.post(POST_COMMENT_EDIT_URL.replace(':id', id),data),
+    POST_COMMENT_EDIT,
+    POST_COMMENT_EDIT_ERROR
+  ]
+
+  const deleteComment = (id)=>[
+    api.delete(DELETE_COMMENT_URL.replace(':id', id)),
+    DELETE_COMMENT,
+    DELETE_COMMENT_ERROR
+  ]
+
   //Client-Login
   const  login = (loginData) =>[
     api.post(POST_CLIENT_LOGIN_URL,loginData),
@@ -253,6 +298,11 @@ const FetchProvider = ({ children }) => {
         closeWithDraw,
         getIssuesList,
         postIssuesCreate,
+        getIssueDetail,
+        getCommentsList,
+        postCommentCreate,
+        postCommentEdit,
+        deleteComment,
         login,
         cleanStatus,
         cleanEthic

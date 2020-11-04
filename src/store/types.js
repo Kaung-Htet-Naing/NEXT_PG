@@ -73,11 +73,30 @@ export const POST_ISSUES_CREATE_URL = '/api/v1/issues'
 export const POST_ISSUES_CREATE = 'POST_ISSUES_CREATE'
 export const POST_ISSUES_CREATE_ERROR = 'POST_ISSUES_CREATE_ERROR'
 
+export const GET_ISSUE_DETAIL_URL = '/api/v1/issues/:id'
+export const GET_ISSUE_DETAIL = 'GET_ISSUE_DETAIL'
+export const GET_ISSUE_DETAIL_ERROR = 'GET_ISSUE_DETAIL_ERROR'
+
+export const GET_COMMENTS_LIST_URL = '/api/v1/issues/:id/comments'
+export const GET_COMMENTS_LIST = 'GET_COMMENTS_LIST'
+export const GET_COMMENTS_LIST_ERROR = 'GET_COMMENTS_LIST_ERROR'
+
+export const POST_COMMENT_CREATE_URL = '/api/v1/issues/:id/comments'
+export const POST_COMMENT_CREATE = 'POST_COMMENT_CREATE'
+export const POST_COMMENT_CREATE_ERROR = 'POST_COMMENT_CREATE_ERROR'
+
+export const POST_COMMENT_EDIT_URL = '/api/v1/comments/:id/update'
+export const POST_COMMENT_EDIT = 'POST_COMMENT_EDIT'
+export const POST_COMMENT_EDIT_ERROR = 'POST_COMMENT_EDIT_ERROR'
+
+export const DELETE_COMMENT_URL = '/api/v1/comments/:id'
+export const DELETE_COMMENT = 'DELETE_COMMENT'
+export const DELETE_COMMENT_ERROR = 'DELETE_COMMENT_ERROR'
+
 //Authentication
 export const POST_CLIENT_LOGIN_URL = '/api/v1/client-login'
 export const POST_CLIENT_LOGIN = 'POST_CLIENT_LOGIN'
 export const POST_CLIENT_LOGIN_ERROR = 'POST_CLIENT_LOGIN_ERROR'
-
 
 //CLEAR_STATUS
 

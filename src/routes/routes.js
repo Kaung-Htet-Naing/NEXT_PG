@@ -117,7 +117,12 @@ const routes = [
       {
         path: '/admin/issue-feed',
         exact: true,
-        component: lazy(() => import('../views/admin/issucetracker/IssuceFeed/IssueFeed'))
+        component: lazy(() => import('../views/admin/issucetracker/IssuceFeed'))
+      },
+      {
+        path: '/admin/issue-feed/detail/:id',
+        exact: true,
+        component: lazy(() => import('../views/admin/issucetracker/issuedetail'))
       },
       {
         component: () => <Redirect to="/errors/error-404" />
