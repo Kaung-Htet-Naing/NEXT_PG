@@ -1,6 +1,5 @@
 import React, { useState, useRef,useContext,useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
@@ -9,7 +8,6 @@ import {
   Divider,
   IconButton,
   Button,
-  Icon,
   TextField,
   Tooltip
 } from '@material-ui/core';
@@ -17,7 +15,6 @@ import SendIcon from '@material-ui/icons/Send';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import { ToastContext } from '../../../../../../context/ToastContext';
 import { FetchContext } from '../../../../../../context/FetchContext';
-import { AuthContext } from '../../../../../../context/AuthContext';
 
 import { fetchData } from '../../../../../../store/action';
 import { connect } from 'react-redux';
@@ -58,7 +55,6 @@ const useStyles = makeStyles(theme => ({
 const AddPost = props => {
   const { className,fetchData, ...rest } = props;
 
-  const authContext = useContext(AuthContext);
   const classes = useStyles();
   const fileInputRef = useRef(null);
   const [value, setValue] = useState('');
@@ -66,6 +62,7 @@ const AddPost = props => {
 
   const fetchContext = useContext(FetchContext);
   const toastContext = useContext(ToastContext);
+
   const [issues,setIssues] = useState({
     title:'',
     description:''
@@ -79,7 +76,6 @@ const AddPost = props => {
   };
 
   const handleImageUploadChange = e => {
-
     setIssues({
       ...issues,
       [e.target.name]: e.target.files[0]
@@ -101,23 +97,26 @@ const AddPost = props => {
       fd.append('photo',issues.imageFile)
     }
     fd.append('photo',issues.imageFile)
+
     console.log(fd)
 
-    try {
-      const config = {
-        method: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data',
-          'Authorization' : `Bearer ${authContext.authState.token}`
-        },
-        url: '/api/v1/issues',
-        data: fd,
-      }
-      const response = await axios(config);
-      console.log(response)
-    } catch (error) {
-      console.log(error)
-    }
+    // try {
+    //   const config = {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'multipart/form-data',
+    //       'Authorization' : `Bearer ${authContext.authState.token}`
+    //     },
+    //     url: '/api/v1/issues',
+    //     data: fd,
+    //   }
+    //   const response = await axios(config);
+    //   console.log(response)
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
+
+  console.log(issues)
 
   return (
     <Card

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
@@ -9,8 +9,6 @@ import {
   Tooltip,
   colors
 } from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import RemoveRedEyeSharpIcon from '@material-ui/icons/RemoveRedEyeSharp';
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 import { useHistory } from 'react-router-dom';
@@ -33,12 +31,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Reactions = props => {
-  const { post, className, ...rest } = props;
+  const { post,id, className, ...rest } = props;
 
   const classes = useStyles();
-  const history = useHistory();
+  const history = useHistory()
 
-  const viewDetail = (id)=>{
+  const viewDetail = (event,id) =>{
     history.push(`/admin/issue-feed/detail/${id}`)
   }
 
@@ -67,11 +65,13 @@ const Reactions = props => {
       ) }
       <Button
         className={classes.shareButton}
-        onClick={viewDetail}
+        onClick={(event) => viewDetail(event,id)}
         size="small"
         variant="contained"
       >
-        <RemoveRedEyeSharpIcon className={classes.viewIcon} />
+        <RemoveRedEyeSharpIcon
+          className={classes.viewIcon}
+        />
         View
       </Button>
     </div>

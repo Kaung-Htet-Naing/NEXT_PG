@@ -11,12 +11,11 @@ import {
   CardActionArea,
   CardMedia,
   Avatar,
-  Link,
   Typography,
   Divider
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-
+import user from '../../../../../../assets/img/client.png'
 import { Reactions, CommentBubble, CommentForm } from './components';
 
 const useStyles = makeStyles(theme => ({
@@ -52,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PostCard = props => {
-  const { detail, className, commentsList,...rest } = props;
+  const { detail,id, className, commentsList,...rest } = props;
 
   const classes = useStyles();
 
@@ -62,10 +61,12 @@ const PostCard = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
+
         avatar={
           <Avatar
-            alt="Person"
+            alt="client"
             className={classes.avatar}
+            src={user}
           />
         }
         disableTypography
@@ -78,15 +79,13 @@ const PostCard = props => {
           </div>
         }
         title={
-          <Link
+          <Typography
             color="textPrimary"
-            component={RouterLink}
             style={{fontWeight:'550'}}
-            to="/profile/1/timeline"
             variant="h5"
           >
             {detail.opened_by}
-          </Link>
+          </Typography>
         }
       />
       <CardContent className={classes.content}>
@@ -121,13 +120,18 @@ const PostCard = props => {
             {commentsList.map(comment => (
               <CommentBubble
                 comment={comment}
+                commentId={comment.id}
+                issueId={id}
                 key={comment.id}
               />
             ))}
           </div>
         }
         <Divider className={classes.divider} />
-        <CommentForm />
+        <CommentForm
+          edit={false}
+          id={id}
+        />
       </CardContent>
     </Card>
   );

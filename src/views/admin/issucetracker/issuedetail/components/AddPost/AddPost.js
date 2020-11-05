@@ -9,7 +9,6 @@ import {
   Divider,
   IconButton,
   Button,
-  Icon,
   TextField,
   Tooltip
 } from '@material-ui/core';

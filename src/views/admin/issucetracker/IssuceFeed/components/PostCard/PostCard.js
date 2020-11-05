@@ -13,11 +13,14 @@ import {
   Avatar,
   Link,
   Typography,
-  Divider
+  Badge
 } from '@material-ui/core';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import user from '../../../../../../assets/img/client.png'
 
-import { Reactions, CommentBubble, CommentForm } from './components';
+import IconButton from '@material-ui/core/IconButton';
+import Comment from '@material-ui/icons/Comment';
+import { Reactions } from './components';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -52,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PostCard = props => {
-  const { post,list, className, ...rest } = props;
+  const { list, className, ...rest } = props;
 
   const classes = useStyles();
 
@@ -62,6 +65,23 @@ const PostCard = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
+        action={
+          <IconButton aria-label="settings">
+            <Badge
+              badgeContent={4}
+              color="error"
+            >
+              <Comment />
+            </Badge>
+          </IconButton>
+        }
+        avatar={
+          <Avatar
+            alt="client"
+            className={classes.avatar}
+            src={user}
+          />
+        }
         disableTypography
         subheader={
           <div className={classes.subheader}>
@@ -106,6 +126,7 @@ const PostCard = props => {
         )}
         <Reactions
           className={classes.reactions}
+          id={list.id}
           post={list}
         />
       </CardContent>

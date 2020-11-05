@@ -1,18 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useState ,useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
 import {
   Avatar,
-  Divider,
   IconButton,
   Input,
   Paper,
   Tooltip
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
-import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
+import { FetchContext } from '../../../../../../../../context/FetchContext';
+import { fetchData } from '../../../../../../../../store/action';
+import { connect } from 'react-redux';
+import user from '../../../../../../../../assets/img/client.png'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,38 +27,31 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     width: '100%'
-  },
-  divider: {
-    width: 1,
-    height: 24
-  },
-  fileInput: {
-    display: 'none'
   }
 }));
 
 const CommentForm = props => {
-  const { className, ...rest } = props;
+  const { className,description,edit,fetchData,id, ...rest } = props;
 
   const classes = useStyles();
+  const fetchContext = useContext(FetchContext);
 
-  const fileInputRef = useRef(null);
-
-  const [value, setValue] = useState('');
-
-  const sender = {
-    avatar: '/images/avatars/avatar_11.png'
-  };
+  const [value, setValue] = useState({description});
 
   const handleChange = event => {
     event.persist();
-
-    setValue(event.target.value);
+    setValue({description:event.target.value});
   };
 
-  const handleAttach = () => {
-    fileInputRef.current.click();
-  };
+  const handleUpdateSend = () => {
+    fetchData(fetchContext.postCommentEdit(id,value))
+    fetchData(fetchContext.getCommentsList(id))
+  }
+
+  const handleSubmitSend = () => {
+    fetchData(fetchContext.postCommentCreate(id,value))
+    fetchData(fetchContext.getCommentsList(id))
+  }
 
   return (
     <div
@@ -66,46 +60,29 @@ const CommentForm = props => {
     >
       <Avatar
         alt="Person"
-        src={sender.avatar}
+        src={user}
       />{' '}
       <Paper
         className={classes.paper}
         elevation={1}
       >
         <Input
+          autoFocus={edit}
           className={classes.input}
           disableUnderline
           onChange={handleChange}
-          placeholder="Leave a message"
+          placeholder={edit?'':'Leave a message'}
+          value={value.description}
         />
       </Paper>
       <Tooltip title="Send">
-        <IconButton color={value.length > 0 ? 'primary' : 'default'}>
-          <SendIcon />
-        </IconButton>
-      </Tooltip>
-      <Divider className={classes.divider} />
-      <Tooltip title="Attach image">
         <IconButton
-          edge="end"
-          onClick={handleAttach}
+          color={value.length > 0 ? 'primary' : 'default'}
+          onClick={edit?handleUpdateSend:handleSubmitSend}
         >
-          <AddPhotoIcon />
+          <SendIcon/>
         </IconButton>
       </Tooltip>
-      <Tooltip title="Attach file">
-        <IconButton
-          edge="end"
-          onClick={handleAttach}
-        >
-          <AttachFileIcon />
-        </IconButton>
-      </Tooltip>
-      <input
-        className={classes.fileInput}
-        ref={fileInputRef}
-        type="file"
-      />
     </div>
   );
 };
@@ -114,4 +91,4 @@ CommentForm.propTypes = {
   className: PropTypes.string
 };
 
-export default CommentForm;
+export default connect(null,{fetchData})(CommentForm);

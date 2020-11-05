@@ -26,15 +26,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const IssueFeed = ({fetchData,detail,commentsList}) => {
+const IssueFeed = ({fetchData,detail,match,commentsList}) => {
   const classes = useStyles();
-
+  const id = match.params.id;
   const fetchContext = useContext(FetchContext);
 
-  useEffect ( ()=>{
-    fetchData(fetchContext.getIssueDetail(101))
-    fetchData(fetchContext.getCommentsList(101))
+  const [comments,setComments] = useState([])
+
+  useEffect (()=>{
+    fetchData(fetchContext.getIssueDetail(id))
+    fetchData(fetchContext.getCommentsList(id))
   },[])
+
+  useEffect( ()=>{
+    setComments(commentsList)
+  },[commentsList])
 
   if(detail !== {}){
     return (
@@ -47,8 +53,9 @@ const IssueFeed = ({fetchData,detail,commentsList}) => {
         <div className={classes.posts}>
           <PostCard
             className={classes.post}
-            commentsList={commentsList}
+            commentsList={comments}
             detail={detail}
+            id={id}
             key={detail.id}
           />
         </div>

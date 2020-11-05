@@ -37,7 +37,7 @@ const Reactions = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      {!post.merchant_need_reply && (
+      {post.merchant_need_reply && (
         <div>
           <Tooltip title="Unlike">
             <IconButton
