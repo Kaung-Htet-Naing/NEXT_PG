@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -51,6 +50,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PostCard = props => {
+
   const { detail,id, className, commentsList,...rest } = props;
 
   const classes = useStyles();
@@ -61,7 +61,6 @@ const PostCard = props => {
       className={clsx(classes.root, className)}
     >
       <CardHeader
-
         avatar={
           <Avatar
             alt="client"
@@ -120,7 +119,6 @@ const PostCard = props => {
             {commentsList.map(comment => (
               <CommentBubble
                 comment={comment}
-                commentId={comment.id}
                 issueId={id}
                 key={comment.id}
               />
@@ -128,10 +126,13 @@ const PostCard = props => {
           </div>
         }
         <Divider className={classes.divider} />
-        <CommentForm
-          edit={false}
-          id={id}
-        />
+        {
+          detail.status_message === 'Open' &&
+          <CommentForm
+            edit={false}
+            id={id}
+          />
+        }
       </CardContent>
     </Card>
   );
@@ -139,7 +140,9 @@ const PostCard = props => {
 
 PostCard.propTypes = {
   className: PropTypes.string,
-  post: PropTypes.object.isRequired
+  commentsList:PropTypes.array.isRequired,
+  detail:PropTypes.object.isRequired,
+  id:PropTypes.string.isRequired,
 };
 
 export default PostCard;

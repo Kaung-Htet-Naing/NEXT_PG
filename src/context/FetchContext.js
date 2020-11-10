@@ -53,9 +53,6 @@ import {
   GET_ISSUES_LIST_URL,
   GET_ISSUES_LIST,
   GET_ISSUES_LIST_ERROR,
-  POST_ISSUES_CREATE_URL,
-  POST_ISSUES_CREATE,
-  POST_ISSUES_CREATE_ERROR,
   GET_ISSUE_DETAIL_URL,
   GET_ISSUE_DETAIL,
   GET_ISSUE_DETAIL_ERROR,
@@ -115,7 +112,7 @@ const FetchProvider = ({ children }) => {
         authContext.logout();
         enqueueSnackbar('Token is expired !', { variant: 'success' });
       }
-      if (code === 404) {
+      if (code === 404 ) {
         enqueueSnackbar(`${error.response.data.message}`, { variant: 'error' });
       }
       return Promise.reject(error);
@@ -222,12 +219,6 @@ const FetchProvider = ({ children }) => {
     GET_ISSUES_LIST_ERROR
   ]
 
-  const postIssuesCreate = (issueData) =>[
-    api.post(POST_ISSUES_CREATE_URL,issueData),
-    POST_ISSUES_CREATE,
-    POST_ISSUES_CREATE_ERROR
-  ]
-
   const getIssueDetail = (id) =>[
     api.get(GET_ISSUE_DETAIL_URL.replace(':id', id)),
     GET_ISSUE_DETAIL,
@@ -297,7 +288,6 @@ const FetchProvider = ({ children }) => {
         getWithDrawTransactionLIst,
         closeWithDraw,
         getIssuesList,
-        postIssuesCreate,
         getIssueDetail,
         getCommentsList,
         postCommentCreate,

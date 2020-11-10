@@ -13,7 +13,6 @@ export const AuthenticationReducer = (state=initialState,action)=>{
     case POST_CLIENT_LOGIN:
       return {...state,login:action.payload};
     case CLEAR_STATUS :
-      console.log('hay')
       return {...state,login:{success:false}};
     default :
       return {...state}

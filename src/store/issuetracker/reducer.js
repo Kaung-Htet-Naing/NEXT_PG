@@ -1,11 +1,11 @@
 import {
   GET_ISSUES_LIST,
-  POST_ISSUES_CREATE,
   GET_ISSUE_DETAIL,
   GET_COMMENTS_LIST,
   POST_COMMENT_CREATE,
   POST_COMMENT_EDIT,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  CLEAN_ETHIC
 } from '../types';
 
 const initialState = {
@@ -22,11 +22,6 @@ export const issueTrackerReducer = (state = initialState,action)=>{
         ...state,
         list:action.payload.data
       };
-    case POST_ISSUES_CREATE :
-      return{
-        ...state,
-        status:action.payload
-      }
     case GET_ISSUE_DETAIL :
       return{
         ...state,
@@ -40,18 +35,20 @@ export const issueTrackerReducer = (state = initialState,action)=>{
     case POST_COMMENT_CREATE :
       return{
         ...state,
-        status:action.payload
+        status:'CREATE'
       };
     case POST_COMMENT_EDIT :
       return{
         ...state,
-        status:action.payload
+        status:'EDIT'
       };
     case DELETE_COMMENT :
       return{
         ...state,
-        status:action.payload
+        status:'DELETE'
       };
+    case CLEAN_ETHIC:
+      return { ...state, status: null }
     default :return{...state}
   }
 }

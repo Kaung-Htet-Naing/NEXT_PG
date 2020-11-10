@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const PostCard = props => {
-  const { list, className, ...rest } = props;
+  const { list,commentCount, className, ...rest } = props;
 
   const classes = useStyles();
 
@@ -66,14 +66,25 @@ const PostCard = props => {
     >
       <CardHeader
         action={
-          <IconButton aria-label="settings">
-            <Badge
-              badgeContent={4}
-              color="error"
-            >
-              <Comment />
-            </Badge>
-          </IconButton>
+          <div>
+            <IconButton aria-label="settings">
+              <Badge
+                badgeContent={commentCount}
+                color="error"
+              >
+                <Comment />
+              </Badge>
+            </IconButton>
+            {
+              list.status_message !== 'Open' &&
+              <Typography
+                color="error"
+                variant="subtitle1"
+              >
+              Closed
+              </Typography>
+            }
+          </div>
         }
         avatar={
           <Avatar

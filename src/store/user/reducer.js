@@ -1,14 +1,15 @@
 import { SESSION_LOGOUT, SESSION_LOGIN } from './type';
+import client from '../../assets/img/client.png'
 
 const initialState = {
   loggedIn: true,
   user: {
-    first_name: 'Shen',
-    last_name: 'Zhi',
+    first_name: 'Client',
+    last_name: '',
     email: 'demo@devias.io',
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Brain Director',
-    role: 'ADMIN' // ['GUEST', 'USER', 'ADMIN']
+    avatar:client ,
+    bio: '',
+    role: 'USER' // ['GUEST', 'USER', 'ADMIN']
   }
 };
 

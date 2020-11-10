@@ -126,7 +126,7 @@ const Results = props => {
 
   useEffect(() => {
     setdatalist(applist)
-  }, [ ])
+  }, [applist])
 
   useEffect( ()=>{
     if(detail.app_id !== undefined){

@@ -1,5 +1,4 @@
-import React,{useState,useContext} from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React,{useState,useContext , useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -49,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CommentBubble = props => {
-  const { comment,commentId, issueId,className, fetchData,...rest } = props;
+  const { comment,status, issueId,className, fetchData,...rest } = props;
 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -73,18 +72,27 @@ const CommentBubble = props => {
 
   const handleCloseDelete = () => {
     setAnchorEl(null);
-    fetchData(fetchContext.deleteComment(commentId))
-    fetchData(fetchContext.getCommentsList(issueId))
-    console.log('close')
+    fetchData(fetchContext.deleteComment(comment.id))
   };
 
 
-  if (edit) return  <CommentForm
-    className={classes.commentEdit}
-    description={comment.description}
-    edit
-    id={commentId}
-                    />
+  useEffect(()=>{
+    if(status === 'DELETE' ){
+      fetchData(fetchContext.getCommentsList(issueId))
+      fetchData(fetchContext.cleanEthic())
+    }
+  },[status])
+
+
+  if (edit)
+    return  <CommentForm
+      className={classes.commentEdit}
+      comment={comment}
+      commentId={comment.id}
+      description={comment.description}
+      edit
+      id={issueId}
+    />
 
   return (
     <div
@@ -155,7 +163,15 @@ const CommentBubble = props => {
 
 CommentBubble.propTypes = {
   className: PropTypes.string,
-  comment: PropTypes.object.isRequired
+  comment: PropTypes.object.isRequired,
+  fetchData:PropTypes.func.isRequired,
+  issueId:PropTypes.string.isRequired
 };
 
-export default connect(null,{fetchData})(CommentBubble);
+const mapStateToProps = ({issues}) =>{
+  return{
+    status:issues.status
+  }
+}
+
+export default connect(mapStateToProps,{fetchData})(CommentBubble);

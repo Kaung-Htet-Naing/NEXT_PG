@@ -7,13 +7,16 @@ import {
   IconButton,
   Input,
   Paper,
-  Tooltip
+  Tooltip,
+  Divider
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
+import Cancel from '@material-ui/icons/Cancel';
 import { FetchContext } from '../../../../../../../../context/FetchContext';
 import { fetchData } from '../../../../../../../../store/action';
 import { connect } from 'react-redux';
 import user from '../../../../../../../../assets/img/client.png'
+import CommentBubble from '../CommentBubble'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -27,16 +30,34 @@ const useStyles = makeStyles(theme => ({
   },
   input: {
     width: '100%'
+  },
+  divider: {
+    width: 1,
+    height: 24
+  },
+  cancalButton:{
+    color:'#ff4d4d'
   }
 }));
 
 const CommentForm = props => {
-  const { className,description,edit,fetchData,id, ...rest } = props;
+  const { className,comment,description='',status,edit,fetchData,id, commentId,...rest } = props;
 
   const classes = useStyles();
   const fetchContext = useContext(FetchContext);
 
   const [value, setValue] = useState({description});
+  const [isDoneEdit,setIsDoneEdit] = useState(false)
+
+  useEffect(()=>{
+    if(status === 'EDIT' || status === 'CREATE'){
+      fetchData(fetchContext.getCommentsList(id))
+      fetchData(fetchContext.cleanEthic())
+    }
+  },[status])
+  useEffect(()=>{
+    setValue({description})
+  },[description])
 
   const handleChange = event => {
     event.persist();
@@ -44,13 +65,26 @@ const CommentForm = props => {
   };
 
   const handleUpdateSend = () => {
-    fetchData(fetchContext.postCommentEdit(id,value))
-    fetchData(fetchContext.getCommentsList(id))
+    if(commentId !== undefined){
+      fetchData(fetchContext.postCommentEdit(commentId,value))
+      setIsDoneEdit(true)
+    }
+    console.log('id',commentId)
+    console.log('value',value)
   }
 
   const handleSubmitSend = () => {
     fetchData(fetchContext.postCommentCreate(id,value))
-    fetchData(fetchContext.getCommentsList(id))
+    setValue({description:''})
+  }
+
+  if(isDoneEdit){
+    return(
+      <CommentBubble
+        comment={comment}
+        issueId={id}
+      />
+    )
   }
 
   return (
@@ -75,12 +109,25 @@ const CommentForm = props => {
           value={value.description}
         />
       </Paper>
+      {
+        edit &&
+          <Tooltip title="Cancel">
+            <IconButton
+              className={classes.cancalButton}
+              onClick={()=>setIsDoneEdit(true)}
+            >
+              <Cancel />
+            </IconButton>
+          </Tooltip>
+      }
+      <Divider className={classes.divider}/>
       <Tooltip title="Send">
         <IconButton
-          color={value.length > 0 ? 'primary' : 'default'}
+          color={value.description.length > 0 ? 'primary' : 'default'}
           onClick={edit?handleUpdateSend:handleSubmitSend}
+          type="submit"
         >
-          <SendIcon/>
+          <SendIcon />
         </IconButton>
       </Tooltip>
     </div>
@@ -88,7 +135,20 @@ const CommentForm = props => {
 };
 
 CommentForm.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  comment:PropTypes.object,
+  commentId:PropTypes.number,
+  description:PropTypes.string,
+  edit:PropTypes.bool.isRequired,
+  fetchData:PropTypes.func.isRequired,
+  id:PropTypes.string.isRequired,
+  status:PropTypes.oneOf([null,'EDIT','CREATE'])
 };
 
-export default connect(null,{fetchData})(CommentForm);
+const mapStateToProps = ({issues})=>{
+  return{
+    status:issues.status
+  }
+}
+
+export default connect(mapStateToProps,{fetchData})(CommentForm);

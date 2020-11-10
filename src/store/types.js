@@ -69,10 +69,6 @@ export const GET_ISSUES_LIST_URL = '/api/v1/issues'
 export const GET_ISSUES_LIST = 'GET_ISSUES_LIST'
 export const GET_ISSUES_LIST_ERROR = 'GET_ISSUES_LIST_ERROR'
 
-export const POST_ISSUES_CREATE_URL = '/api/v1/issues'
-export const POST_ISSUES_CREATE = 'POST_ISSUES_CREATE'
-export const POST_ISSUES_CREATE_ERROR = 'POST_ISSUES_CREATE_ERROR'
-
 export const GET_ISSUE_DETAIL_URL = '/api/v1/issues/:id'
 export const GET_ISSUE_DETAIL = 'GET_ISSUE_DETAIL'
 export const GET_ISSUE_DETAIL_ERROR = 'GET_ISSUE_DETAIL_ERROR'

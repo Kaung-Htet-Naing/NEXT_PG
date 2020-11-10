@@ -13,8 +13,9 @@ import {
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
-import { ToastContext } from '../../../../../../context/ToastContext';
+import { AuthContext } from '../../../../../../context/AuthContext';
 import { FetchContext } from '../../../../../../context/FetchContext';
+import { ToastContext } from 'context/ToastContext';
 
 import { fetchData } from '../../../../../../store/action';
 import { connect } from 'react-redux';
@@ -53,19 +54,25 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const AddPost = props => {
-  const { className,fetchData, ...rest } = props;
+  const { className,status,fetchData, ...rest } = props;
 
   const classes = useStyles();
   const fileInputRef = useRef(null);
-  const [value, setValue] = useState('');
-  const session = useSelector(state => state.session);
-
+  const authContext = useContext(AuthContext);
   const fetchContext = useContext(FetchContext);
   const toastContext = useContext(ToastContext);
 
+  const [isDisable,setIsDisable] = useState(true)
   const [issues,setIssues] = useState({
     title:'',
-    description:''
+    description:'',
+    imageFileType:'',
+    imageFileSize:0
+  })
+
+  const [errors,setErrors] = useState({
+    title:'',
+    description:'',
   })
 
   const handleChange = event => {
@@ -73,14 +80,63 @@ const AddPost = props => {
 
     event.preventDefault();
     setIssues({...issues,[name]:value})
+    if(value===' '){
+      setErrors({...errors,[name]:`${name.toUpperCase().replace(/_/g, ' ')} is required !`})
+      setIssues({...issues,[name]:value})
+    }else{
+      setIssues({...issues,[name]:value})
+      setErrors({...errors,[name]:''})
+    }
   };
 
+  // const validate = ()=>{
+  //   if(issues.title==='') setErrors({...errors,title:'Title is required !'})
+  //   if(issues.description==='') setErrors({...errors,description:'Description is required !'})
+  // }
+
+  useEffect(()=>{
+    const {title,description,imageFileType }=issues
+    if(
+      title.length>0 &&
+      description.length>0
+    ){
+      if(
+        imageFileType === 'image/jpg' ||
+        imageFileType === 'image/jpeg' ||
+        imageFileType === 'image/png' ||
+        imageFileType === ''
+      ){
+        setIsDisable(false)
+      }
+      else setIsDisable(true)
+    }
+    else setIsDisable(true)
+  },[issues])
+
   const handleImageUploadChange = e => {
+    const file = e.target.files[0]
+    const {type,size} = e.target.files[0]
+    console.log(size)
     setIssues({
       ...issues,
-      [e.target.name]: e.target.files[0]
+      [e.target.name]: file,
+      imageFileType:type,
+      imageFileSize:e.target.files[0].size
     })
-    console.log(e.target.files)
+    if(
+      type !== 'image/jpg' &&
+      type !== 'image/jpeg' &&
+      type !== 'image/png'
+    ){
+      toastContext.addToast('File Must Be JPG Or JPEG Or PNG.', 'warning');
+      fetchData(fetchContext.cleanEthic());
+    }
+
+    if( size > 2048000 ){
+      toastContext.addToast('File Size Is Greater Than 2MB.', 'warning');
+      fetchData(fetchContext.cleanEthic());
+    }
+
   };
 
   const handleAttach = () => {
@@ -96,27 +152,28 @@ const AddPost = props => {
     if(issues.imageFile){
       fd.append('photo',issues.imageFile)
     }
-    fd.append('photo',issues.imageFile)
+    // console.log(fd)
+    // console.log(issues)
+    console.log(errors)
 
-    console.log(fd)
-
-    // try {
-    //   const config = {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'multipart/form-data',
-    //       'Authorization' : `Bearer ${authContext.authState.token}`
-    //     },
-    //     url: '/api/v1/issues',
-    //     data: fd,
-    //   }
-    //   const response = await axios(config);
-    //   console.log(response)
-    // } catch (error) {
-    //   console.log(error)
-    // }
+    try {
+      const config = {
+        method: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data',
+          'Authorization' : `Bearer ${authContext.authState.token}`
+        },
+        url: '/api/v1/issues',
+        data: fd,
+      }
+      const response = await axios(config);
+      fetchData(fetchContext.getIssuesList())
+      toastContext.addToast('Successfully created.', 'success');
+      fetchData(fetchContext.cleanEthic());
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
   }
-
-  console.log(issues)
 
   return (
     <Card
@@ -127,6 +184,8 @@ const AddPost = props => {
         <form >
           <div className={classes.formGroup}>
             <TextField
+              error={errors.title.length>0?true:false}
+              helperText={errors.title.length > 0 ? errors.title : ''}
               label="Title"
               name="title"
               onChange={handleChange}
@@ -135,7 +194,9 @@ const AddPost = props => {
           </div>
           <div className={classes.formGroup}>
             <TextField
+              error={errors.description.length>0?true:false}
               fullWidth
+              helperText={errors.description.length > 0 ? errors.description : ''}
               label="Description"
               multiline
               name="description"
@@ -170,6 +231,7 @@ const AddPost = props => {
               <Button
                 className={classes.button}
                 color="primary"
+                disabled={isDisable}
                 endIcon={<SendIcon/>}
                 onClick={handleSubmit}
                 variant="contained"
@@ -190,4 +252,4 @@ const mapStateToProps = ({issues})=>{
   }
 }
 
-export default connect(mapStateToProps)(AddPost);
+export default connect(mapStateToProps,{fetchData})(AddPost);

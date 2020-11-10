@@ -25,30 +25,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const IssueFeed = ({fetchData,commentsList,lists}) => {
+const IssueFeed = ({fetchData,issuesList}) => {
   const classes = useStyles();
   const fetchContext = useContext(FetchContext);
-  const [commentCount,setCommentCount] = useState([])
+  const [lists,setLists] = useState([]);
 
   useEffect ( ()=>{
     fetchData(fetchContext.getIssuesList())
   },[])
 
-  useEffect(()=>{
-    getIssueId(lists)
-  },[lists])
-
-  useEffect(()=>{
-    setCommentCount(commentCount.concat(commentsList.length))
-  },[commentsList])
-
-
-  const getIssueId = (issues)=>{
-    issues.map(issue=>{
-      fetchData(fetchContext.getCommentsList(issue.id))
-      console.log(commentsList.length)
-    })
-  }
+  useEffect( ()=>{
+    setLists(issuesList)
+  },[issuesList])
 
   return (
     <Page
@@ -61,6 +49,7 @@ const IssueFeed = ({fetchData,commentsList,lists}) => {
         {lists.map(list => (
           <PostCard
             className={classes.post}
+            commentCount={list.comments_count}
             key={list.id}
             list={list}
           />
@@ -72,8 +61,7 @@ const IssueFeed = ({fetchData,commentsList,lists}) => {
 
 const mapStateToProps = ({issues})=>{
   return{
-    lists:issues.list,
-    commentsList:issues.commentsList
+    issuesList:issues.list
   }
 }
 

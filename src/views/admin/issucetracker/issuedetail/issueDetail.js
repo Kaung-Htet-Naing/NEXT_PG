@@ -1,8 +1,7 @@
 import React, { useState, useEffect ,useContext} from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import axios from 'utils/axios';
-import { Header,AddPost,PostCard } from './components';
+import { Header,PostCard } from './components';
 import { Page} from 'components';
 import { FetchContext } from '../../../../context/FetchContext';
 import { fetchData } from '../../../../store/action';
@@ -42,6 +41,7 @@ const IssueFeed = ({fetchData,detail,match,commentsList}) => {
     setComments(commentsList)
   },[commentsList])
 
+
   if(detail !== {}){
     return (
       <Page
@@ -49,14 +49,12 @@ const IssueFeed = ({fetchData,detail,match,commentsList}) => {
         title="Social Feed"
       >
         <Header />
-        <AddPost className={classes.newPost} />
         <div className={classes.posts}>
           <PostCard
             className={classes.post}
             commentsList={comments}
             detail={detail}
             id={id}
-            key={detail.id}
           />
         </div>
       </Page>

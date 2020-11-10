@@ -13,7 +13,7 @@ import navigationConfig from './navigationConfig';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: '100%',
+    height: '100vh',
     overflowY: 'auto'
   },
   content: {
