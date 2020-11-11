@@ -7,9 +7,9 @@ export const GET_APP_LISTING_URL = '/api/v1/app-listing';
 export const GET_APP_LISTING = 'GET_APP_LISTING';
 export const GET_APP_LISTING_ERROR = 'GET_APP_LISTING_ERROR';
 
-export const GET_APP_DETAIL_URL = '/api/v1/apps/:app_id/detail';
 export const GET_APP_DETAIL = 'GET_APP_DETAIL';
-export const GET_APP_DETAIL_ERROR = 'GET_APP  _DETAIL_ERROR';
+
+export const CLEAN_APP_DETAIL = 'CLEAN_APP_DETAIL';
 
 export const UPDATE_APP_URL = '/api/v1/apps/:id/update';
 export const UPDATE_APP = 'UPDATE_APP';
@@ -95,8 +95,16 @@ export const POST_CLIENT_LOGIN = 'POST_CLIENT_LOGIN'
 export const POST_CLIENT_LOGIN_ERROR = 'POST_CLIENT_LOGIN_ERROR'
 
 //CLEAR_STATUS
-
 export const CLEAR_STATUS = 'CLEAR_STATUS'
 
 //CLEAN
 export const CLEAN_ETHIC = 'CLEAN_ETHIC';
+
+//STORE_PASSWORD
+export const STORE_PASSWORD = 'STORE_PASSWORD';
+
+//CLEAN_PASSWORD
+export const CLEAN_PASSWORD = 'CLEAN_PASSWORD';
+
+//SELECT_EDIT
+export const SELECT_EDIT = 'SELECT_EDIT';

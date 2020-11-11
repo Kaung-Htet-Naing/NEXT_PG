@@ -26,6 +26,8 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import ReactExport from 'react-export-excel';
 
 import { selectdata } from '../../../../../../store/app/action';
+import { dataDetail } from '../../../../../../store/app/action';
+import { storePassword } from '../../../../../../store/app/action';
 import { withRouter } from 'react-router-dom';
 import { fetchData } from 'store/action';
 import { FetchContext } from 'context/FetchContext';
@@ -104,7 +106,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Results = props => {
-  const {  applist, selectdata,detail, status, history,  fetchData, ...rest } = props;
+  const {  applist, selectdata, status, history,dataDetail,storePassword, fetchData } = props;
 
   const classes = useStyles();
   const [password, setPassword] = useState('');
@@ -122,19 +124,20 @@ const Results = props => {
 
   useEffect(() => {
     fetchData(fetchContext.appList());
-  }, [])
+  }, [fetchData,fetchContext])
 
   useEffect(() => {
     setdatalist(applist)
   }, [applist])
 
   useEffect( ()=>{
-    if(detail.app_id !== undefined){
+    if(status === 'OK'){
       history.push(`/admin/app/${appId}/detail`);
-      setPassword(null)
+      fetchData(fetchContext.cleanEthic());
+      setPassword('')
       setappId(null)
     }
-  },[detail])
+  },[status,history,fetchData,fetchContext,appId])
 
   useEffect(() => {
     if (status === 'DELETE') {
@@ -145,8 +148,7 @@ const Results = props => {
         setDisable(false);
       }, [2000])
     }
-  }, [status])
-
+  }, [status,fetchContext,fetchData,toastContext])
 
   const handleInput = (event) => {
     setPassword(event.target.value)
@@ -155,10 +157,9 @@ const Results = props => {
   const handleSubmit = (event, appID) => {
     event.preventDefault();
     setappId(appID);
-
+    storePassword(password)
     try {
-      fetchData(fetchContext.appDetail(appID, password))
-
+      dataDetail(appID, password)
     } catch (error) {
       console.log(error)
     }
@@ -283,17 +284,17 @@ const Results = props => {
             <TableBody>
               {stableSort(list, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((data) => {
+                .map((data,index) => {
                   return (
                     <TableRow
                       hover
-                      key={data.id}
+                      key={index}
                       role="checkbox"
                       tabIndex={-1}
                     >
                       <TableCell
                         component="th"
-                        padding="1px"
+                        padding="default"
                         scope="row"
                       >
                         {data.app_name}
@@ -398,11 +399,10 @@ const Results = props => {
 const mapStateToProps = ({ appdata }) => {
   return {
     applist: appdata.list,
-    status: appdata.status,
-    detail:appdata.detail
+    status: appdata.status
   }
 }
 
 export default withRouter(connect(mapStateToProps, {
-  selectdata, fetchData
+  selectdata, fetchData,storePassword,dataDetail
 })(Results));

@@ -117,7 +117,7 @@ function AppEdit(props) {
       fetchData(fetchContext.cleanEthic());
       history.push('/admin/app/list')
     }
-  }, [status])
+  }, [status,fetchData,fetchContext,history,toastContext])
 
   useEffect(() => {
     const { app_name, frontend_url, backend_url, category, payment_type, platform } = data;

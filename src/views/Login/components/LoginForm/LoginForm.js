@@ -134,7 +134,7 @@ const LoginForm = props => {
         email: '',
         password: ''})
     }
-  },[login])
+  },[login,history,fetchData,fetchContext,authContext])
 
   return (
     <form

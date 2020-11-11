@@ -32,7 +32,7 @@ const TransactionsList = ({ list, fetchData, links, meta
 
   useEffect(() => {
     fetchData(fetchContext.getClientTransactions())
-  }, []);
+  }, [fetchData,fetchContext]);
 
   useEffect(() => {
     setTransactionslist(list)
@@ -72,7 +72,7 @@ const TransactionsList = ({ list, fetchData, links, meta
         {total > 15 && <Paginate
           onPageChange={onPaginationChange}
           pageCount={3}
-        />
+                       />
         }
       </div>
     </Page>

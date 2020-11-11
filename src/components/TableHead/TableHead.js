@@ -17,7 +17,7 @@ export default function EnhancedTableHead(props) {
           <TableCell
             align={headCell.numeric ? 'right' : 'left'}
             key={headCell.id}
-            padding={headCell.disablePadding ? '1px' : 'default'}
+            padding="default"
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel

@@ -13,7 +13,7 @@ import navigationConfig from './navigationConfig';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    height: '100vh',
+    height: '100%',
     overflowY: 'auto'
   },
   content: {
@@ -75,10 +75,10 @@ const NavBar = props => {
       </div>
       <Divider className={classes.divider} />
       <nav className={classes.navigation}>
-        {navigationConfig.map(list => (
+        {navigationConfig.map((list,index) => (
           <Navigation
             component="div"
-            key={list.title}
+            key={index}
             pages={list.pages}
             title={list.title}
           />

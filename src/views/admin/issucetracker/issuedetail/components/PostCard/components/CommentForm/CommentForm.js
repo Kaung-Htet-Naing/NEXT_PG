@@ -54,7 +54,8 @@ const CommentForm = props => {
       fetchData(fetchContext.getCommentsList(id))
       fetchData(fetchContext.cleanEthic())
     }
-  },[status])
+  },[status,fetchData,fetchContext,id])
+
   useEffect(()=>{
     setValue({description})
   },[description])

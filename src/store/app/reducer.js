@@ -1,8 +1,4 @@
 import {
-  SELECT_EDIT
-} from './type';
-
-import {
   POST_APP_CREATE,
   GET_APP_CATEGORIES,
   GET_APP_DETAIL,
@@ -12,6 +8,10 @@ import {
   DELETE_APP,
   UPDATE_APP,
   DELETE_APP_ERROR,
+  CLEAN_APP_DETAIL,
+  SELECT_EDIT,
+  STORE_PASSWORD,
+  CLEAN_PASSWORD
 } from '../types'
 
 const INITIAL_STATE = {
@@ -29,7 +29,9 @@ export default (state = INITIAL_STATE, action) => {
     case POST_APP_CREATE:
       return { ...state, status: 'SUCCESS' };
     case GET_APP_DETAIL:
-      return { ...state, detail: action.payload.data };
+      return { ...state, detail: action.payload.data.data , status:action.payload.statusText};
+    case CLEAN_APP_DETAIL:
+      return { ...state, detail: {} };
     case UPDATE_APP:
       return { ...state, status: 'SUCCESS' };
     case DELETE_APP:
@@ -76,6 +78,17 @@ export const selectedDataReducer = (state = initialSelect, action) => {
   switch (action.type) {
     case SELECT_EDIT:
       return { data: action.payload };
+    default:
+      return state;
+  }
+}
+
+export const storePasswordReducer = (state = {password:null}, action) => {
+  switch (action.type) {
+    case STORE_PASSWORD:
+      return { password: action.payload };
+    case CLEAN_PASSWORD:
+      return { password:null };
     default:
       return state;
   }

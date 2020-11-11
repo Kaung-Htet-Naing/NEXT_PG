@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
-import { withRouter, useHistory } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
 import {
@@ -11,9 +11,7 @@ import {
   GET_APP_LISTING_URL,
   GET_APP_LISTING,
   GET_APP_LISTING_ERROR,
-  GET_APP_DETAIL_URL,
-  GET_APP_DETAIL,
-  GET_APP_DETAIL_ERROR,
+  CLEAN_APP_DETAIL,
   GET_APP_CATEGORIES_URL,
   GET_APP_CATEGORIES,
   GET_APP_CATEGORIES_ERROR,
@@ -72,7 +70,8 @@ import {
   POST_CLIENT_LOGIN,
   POST_CLIENT_LOGIN_ERROR,
   CLEAR_STATUS,
-  CLEAN_ETHIC
+  CLEAN_ETHIC,
+  CLEAN_PASSWORD
 } from '../store/types';
 
 const FetchContext = createContext();
@@ -84,7 +83,6 @@ const FetchProvider = ({ children }) => {
 
   const authContext = useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
-  const history = useHistory();
 
   const api = axios.create({
     baseURL: process.env.REACT_APP_API_SERVER
@@ -108,7 +106,7 @@ const FetchProvider = ({ children }) => {
     error => {
       const code = error && error.response ? error.response.status : 0;
       console.log(error.response)
-      if (code === 401 || code === 403) {
+      if ( code === 401  || code === 403) {
         authContext.logout();
         enqueueSnackbar('Token is expired !', { variant: 'success' });
       }
@@ -132,10 +130,10 @@ const FetchProvider = ({ children }) => {
     GET_APP_LISTING_ERROR
   ]
 
-  const appDetail = (app_id,password) => [
-    api.post(GET_APP_DETAIL_URL.replace(':app_id',app_id),{'password':password}),
-    GET_APP_DETAIL,
-    GET_APP_DETAIL_ERROR
+  const cleanAppDetail = () => [
+    CLEAN_APP_DETAIL,
+    CLEAN_APP_DETAIL,
+    CLEAN_APP_DETAIL
   ]
 
   const deleteData = (appId) => [
@@ -269,13 +267,18 @@ const FetchProvider = ({ children }) => {
     CLEAR_STATUS
   ]
 
+  //CLEAN_PASSWORD
+  const cleanPassword = () => [
+    CLEAN_PASSWORD,
+    CLEAN_PASSWORD,
+    CLEAN_PASSWORD
+  ]
   return (
     <Provider
       value={{
         appCreate,
         appList,
         getappCategories,
-        appDetail,
         getappPayments,
         deleteData,
         appUpdate,
@@ -295,7 +298,9 @@ const FetchProvider = ({ children }) => {
         deleteComment,
         login,
         cleanStatus,
-        cleanEthic
+        cleanAppDetail,
+        cleanEthic,
+        cleanPassword
       }}
     >
       {children}

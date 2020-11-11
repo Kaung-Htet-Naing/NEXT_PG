@@ -23,8 +23,7 @@ const TransationDetail = ({ fetchData, detail, match }) => {
 
   useEffect(() => {
     fetchData(fetchContext.getClientTransactionsDetail(invoiceNo))
-  }, [])
-
+  }, [fetchData,fetchContext,invoiceNo])
 
   return (
     <Page

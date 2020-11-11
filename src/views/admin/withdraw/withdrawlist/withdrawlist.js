@@ -28,10 +28,9 @@ const WithDrawList = ({ list,  meta, fetchData, history }) => {
   const [withDrawlist, setWithDrawList] = useState([]);
   const { current_page, last_page, total } = meta;
 
-
   useEffect(() => {
     fetchData(fetchContext.getWithDrawList())
-  }, []);
+  }, [fetchData,fetchContext]);
 
   useEffect(() => {
     setWithDrawList(list);

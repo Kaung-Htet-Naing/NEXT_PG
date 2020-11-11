@@ -35,7 +35,7 @@ const IssueFeed = ({fetchData,detail,match,commentsList}) => {
   useEffect (()=>{
     fetchData(fetchContext.getIssueDetail(id))
     fetchData(fetchContext.getCommentsList(id))
-  },[])
+  },[fetchData,fetchContext,id])
 
   useEffect( ()=>{
     setComments(commentsList)

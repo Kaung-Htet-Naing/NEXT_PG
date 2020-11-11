@@ -81,7 +81,7 @@ const CommentBubble = props => {
       fetchData(fetchContext.getCommentsList(issueId))
       fetchData(fetchContext.cleanEthic())
     }
-  },[status])
+  },[status,fetchData,fetchContext,issueId])
 
 
   if (edit)

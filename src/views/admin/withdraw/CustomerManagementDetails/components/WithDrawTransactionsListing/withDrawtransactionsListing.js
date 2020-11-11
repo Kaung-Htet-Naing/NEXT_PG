@@ -19,12 +19,9 @@ import { FetchContext } from '../../../../../../context/FetchContext';
 import { fetchData } from '../../../../../../store/action';
 import {EnhancedTableHead} from 'components';
 
-
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
-
-
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -98,13 +95,12 @@ function WithDrawTransactions({fetchData,list,id}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('amount');
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const fetchContext = useContext(FetchContext);
 
   useEffect(() => {
     fetchData(fetchContext.getWithDrawTransactionLIst(id))
-  }, [])
+  }, [fetchData,fetchContext,id])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -215,8 +211,7 @@ function WithDrawTransactions({fetchData,list,id}) {
             <TableBody>
               {stableSort(list, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((data, index) => {
-
+                .map((data) => {
                   return (
                     <TableRow
                       hover
@@ -226,7 +221,7 @@ function WithDrawTransactions({fetchData,list,id}) {
                     >
                       <TableCell
                         component="th"
-                        padding="1px"
+                        padding="default"
                         scope="row"
                       >
                         {data.id}

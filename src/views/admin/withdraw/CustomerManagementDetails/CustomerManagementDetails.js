@@ -34,7 +34,7 @@ const WithDrawDetails = props => {
 
   useEffect(() => {
     fetchData(fetchContext.getWithDrawDetail(id))
-  }, [])
+  }, [fetchData,fetchContext,id])
 
   useEffect( ()=>{
     if(status===3){

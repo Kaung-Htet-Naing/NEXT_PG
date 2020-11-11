@@ -12,7 +12,6 @@ import {
   TableRow,
   TableCell,
 } from '@material-ui/core';
-import { dataDetail } from '../../../../../../store/app/action';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
@@ -93,6 +92,4 @@ const TransationInfo = props => {
   );
 };
 
-export default connect(null, {
-  dataDetail
-})(TransationInfo);
+export default connect(null)(TransationInfo);

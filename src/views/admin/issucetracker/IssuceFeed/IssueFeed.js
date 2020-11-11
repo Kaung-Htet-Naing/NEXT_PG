@@ -32,7 +32,7 @@ const IssueFeed = ({fetchData,issuesList}) => {
 
   useEffect ( ()=>{
     fetchData(fetchContext.getIssuesList())
-  },[])
+  },[fetchData,fetchContext])
 
   useEffect( ()=>{
     setLists(issuesList)

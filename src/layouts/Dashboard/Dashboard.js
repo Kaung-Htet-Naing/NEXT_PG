@@ -1,10 +1,11 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState ,useContext} from 'react';
 import { renderRoutes } from 'react-router-config';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { LinearProgress } from '@material-ui/core';
-
-import { NavBar, TopBar, ChatBar } from './components';
+import {AuthContext} from 'context/AuthContext'
+import { NavBar, TopBar } from './components';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,6 +42,7 @@ const Dashboard = props => {
 
   const classes = useStyles();
   const [openNavBarMobile, setOpenNavBarMobile] = useState(false);
+  const authContext = useContext(AuthContext)
 
   const handleNavBarMobileOpen = () => {
     setOpenNavBarMobile(true);
@@ -49,6 +51,8 @@ const Dashboard = props => {
   const handleNavBarMobileClose = () => {
     setOpenNavBarMobile(false);
   };
+
+  if(!authContext.isAuthenticated()) return <Redirect to="/auth/login"/>
 
   return (
     <div className={classes.root}>
@@ -68,7 +72,6 @@ const Dashboard = props => {
           </Suspense>
         </main>
       </div>
-      <ChatBar />
     </div>
   );
 };

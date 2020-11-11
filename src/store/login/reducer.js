@@ -1,6 +1,5 @@
 import {
   POST_CLIENT_LOGIN,
-  POST_CLIENT_LOGIN_ERROR,
   CLEAR_STATUS
 } from '../types';
 

@@ -20,8 +20,6 @@ const Detail = props => {
 
   const classes = useStyles();
 
-  console.log(detail.payment_slip)
-
   return (
     <Grid
       {...rest}
@@ -47,6 +45,7 @@ const Detail = props => {
       >
         <Card className={classes.root} >
           <img
+            alt="payment_slip"
             className={classes.image}
             src={detail.payment_slip}
           />

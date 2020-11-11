@@ -5,6 +5,11 @@ import { connect } from 'react-redux';
 import { AppInfo } from './components';
 import { Redirect } from 'react-router-dom';
 
+
+import { fetchData } from 'store/action';
+import { FetchContext } from 'context/FetchContext';
+import { dataDetail } from 'store/app/action';
+
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3)
@@ -14,10 +19,17 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const AppDetail = ({  detail }) => {
+const AppDetail = ({  detail,fetchData,match ,password}) => {
   const classes = useStyles();
+  const id = match.params.app_id
+  const fetchContext = useContext(FetchContext);
 
-  if (!detail.app_id ) return <Redirect to="/admin/app/list" />
+  useEffect(()=>{
+    dataDetail(id, password)
+    fetchData(fetchContext.cleanPassword())
+  },[fetchData,fetchContext,id,password])
+
+  if (!detail.app_id) return <Redirect to="/admin/app/list" />
 
   return (
     <Page
@@ -29,8 +41,12 @@ const AppDetail = ({  detail }) => {
   )
 }
 
-const mapStateToProps = ({ appdata }) => {
-  return ({ detail: appdata.detail })
+const mapStateToProps = (store) => {
+  return ({
+    password: store.detailPassword.password,
+    detail : store.appdata.detail
+  })
 }
 
-export default connect(mapStateToProps)(AppDetail);
+
+export default connect(mapStateToProps,{fetchData})(AppDetail);

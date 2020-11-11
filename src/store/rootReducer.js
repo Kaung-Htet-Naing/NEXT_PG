@@ -5,6 +5,7 @@ import appReducer from './app/reducer';
 import { categoriesReducer } from './app/reducer';
 import { paymentTypesReducer } from './app/reducer';
 import { selectedDataReducer } from './app/reducer';
+import { storePasswordReducer } from './app/reducer';
 import { clientTransactionsReducer } from './transactions/reducer';
 import { withDrawReducer } from './withDraw/reducer'
 import { issueTrackerReducer } from './issuetracker/reducer'
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   categories: categoriesReducer,
   paymentTypes: paymentTypesReducer,
   selectedApp: selectedDataReducer,
+  password:storePasswordReducer,
   transactions: clientTransactionsReducer,
   withDraw: withDrawReducer,
   issues:issueTrackerReducer
